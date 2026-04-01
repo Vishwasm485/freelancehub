@@ -24,7 +24,7 @@ def register():
     cursor.execute("""
         INSERT INTO users (name, gender, email, phone, password, role)
         VALUES (%s,%s,%s,%s,%s,%s)
-    """, (data['name'], data['gender'], data['email'],
+    """, (data['name'], data.get('gender'), data['email'],
           data['phone'], hashed, data['role']))
 
     conn.commit()
@@ -36,24 +36,34 @@ def register():
 # SEND OTP
 @auth_bp.route('/send-otp', methods=['POST'])
 def send_otp():
-    data = request.json
-    otp = generate_otp()
+    try:
+        data = request.json
+        otp = generate_otp()
 
-    print("OTP:", otp)  # simulate sending
+        print("API HIT")
+        
+        print("DATA:", data)
+        print("OTP GENERATED:", otp)
+        conn, cursor = get_cursor()
 
-    conn, cursor = get_cursor()
+        cursor.execute("""
+            INSERT INTO otp_verification (email, phone, otp, expires_at)
+            VALUES (%s,%s,%s,%s)
+        """, (
+            data.get('email') or None,
+            data.get('phone') or None,
+            otp,
+            get_expiry()
+        ))
 
-    cursor.execute("""
-        INSERT INTO otp_verification (email, phone, otp, expires_at)
-        VALUES (%s,%s,%s,%s)
-    """, (data.get('email'), data.get('phone'), otp, get_expiry()))
+        conn.commit()
+        conn.close()
 
-    conn.commit()
-    conn.close()
+        return jsonify({"message": "OTP sent"})
 
-    return jsonify({"message": "OTP sent"})
-
-
+    except Exception as e:
+        print("ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 # VERIFY OTP
 @auth_bp.route('/verify-otp', methods=['POST'])
 def verify_otp():
@@ -91,16 +101,25 @@ def login():
     data = request.json
     conn, cursor = get_cursor()
 
-    cursor.execute("SELECT * FROM users WHERE email=%s", (data['email'],))
+    email = data.get('email')
+    password = data.get('password')
+    role = data.get('role')
+
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
     user = cursor.fetchone()
 
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    if not check_password(data['password'], user['password']):
+    if not check_password(password, user['password']):
         return jsonify({"error": "Wrong password"}), 401
 
+    if user['role'] != role:
+        return jsonify({"error": "Role mismatch"}), 403
+
     return jsonify({
+        "message": "Login successful",
         "user_id": user['id'],
-        "role": user['role']
+        "role": user['role'],
+        "name": user['name']
     })

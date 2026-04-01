@@ -11,7 +11,7 @@ from routes.chat_routes import chat_bp
 
 # Initialize App
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 🔹 Register Blueprints
 app.register_blueprint(auth_bp, url_prefix="/api")
@@ -22,7 +22,7 @@ app.register_blueprint(chat_bp, url_prefix="/api/chat")
 
 @app.route("/api/login", methods=["POST"])
 def login():
-    data = request.get_json()
+    data = request.form
 
     email = data.get("email")
     password = data.get("password")
@@ -59,4 +59,4 @@ def login():
 # Run Server
 if __name__ == "__main__":
     print("Starting Flask App...")
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)

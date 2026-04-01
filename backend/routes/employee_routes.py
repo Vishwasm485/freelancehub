@@ -74,10 +74,36 @@ def get_all_projects():
     conn, cursor = get_cursor()
 
     cursor.execute("""
-        SELECT * FROM projects WHERE status='open'
+        SELECT 
+            p.id, p.title, p.description, p.budget,
+            b.id AS bid_id, b.employee_id, b.bid_amount
+        FROM projects p
+        LEFT JOIN bids b ON p.id = b.project_id
+        WHERE p.status='open'
     """)
 
-    projects = cursor.fetchall()
-    conn.close()
+    rows = cursor.fetchall()
+    
+    projects = {}
 
-    return jsonify(projects)
+    for row in rows:
+        pid = row['id']
+
+        if pid not in projects:
+            projects[pid] = {
+                "id": pid,
+                "title": row['title'],
+                "description": row['description'],
+                "budget": row['budget'],
+                "bids": []
+            }
+
+        if row['bid_id']:
+            projects[pid]["bids"].append({
+                "id": row['bid_id'],
+                "employee_id": row['employee_id'],
+                "bid_amount": row['bid_amount']
+            })
+    conn.close()
+    return jsonify(list(projects.values()))
+  
