@@ -40,6 +40,9 @@ function Login({ setPage }) {
           } else if (data.role === "employer") {
             setPage("employer");
           }
+           else if (data.role === "admin") {
+           setPage("admin");
+          }
         }
       })
       .catch(err => {
@@ -52,19 +55,6 @@ function Login({ setPage }) {
     <div style={{ textAlign: "center", marginTop: "100px" }}>
       <h2>Login</h2>
 
-      <input
-        type="email"
-        placeholder="Enter Email"
-        onChange={(e) => setEmail(e.target.value)}
-      /><br /><br />
-
-      <input
-        type="password"
-        placeholder="Enter Password"
-        onChange={(e) => setPassword(e.target.value)}
-      /><br /><br />
-
-      {/* Role Selection */}
       <div>
         <label>
           <input
@@ -85,7 +75,30 @@ function Login({ setPage }) {
           />
           Employer
         </label>
+
+        <label style={{ marginLeft: "15px" }}>
+          <input
+            type="radio"
+            value="admin"
+            checked={role === "admin"}
+            onChange={(e) => setRole(e.target.value)}
+          />
+          Admin
+        </label>
       </div>
+
+      <input
+        type="email"
+        placeholder="Enter Email"
+        onChange={(e) => setEmail(e.target.value)}
+      /><br /><br />
+
+      <input
+        type="password"
+        placeholder="Enter Password"
+        onChange={(e) => setPassword(e.target.value)}
+      /><br /><br />
+
 
       <br />
 
