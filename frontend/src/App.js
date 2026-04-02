@@ -3,6 +3,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import EmployerDashboard from "./pages/EmployerDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
+import PostResource from "./pages/PostResource";
+import ViewResources from "./pages/ViewResources";
 
 function App() {
   const [page, setPage] = useState("home");
@@ -13,6 +16,14 @@ function App() {
         return <Login setPage={setPage} />;
       case "signup":
         return <Signup goHome={() => setPage("home")} />;
+      case "admin":
+        return <AdminDashboard setPage={setPage} />;
+
+      case "post-resource":
+        return <PostResource setPage={setPage} />;
+
+      case "view-resources":
+        return <ViewResources setPage={setPage} />;
       case "employee":
         return <EmployeeDashboard />;
       case "employer":
