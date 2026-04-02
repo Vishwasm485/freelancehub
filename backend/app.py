@@ -20,42 +20,6 @@ app.register_blueprint(employee_bp, url_prefix="/api/employee")
 app.register_blueprint(admin_bp, url_prefix="/api/admin")
 app.register_blueprint(chat_bp, url_prefix="/api/chat")
 
-@app.route("/api/login", methods=["POST"])
-def login():
-    data = request.form
-
-    email = data.get("email")
-    password = data.get("password")
-    role = data.get("role")
-
-    print("Login Attempt:", email, role)
-
-    # 🔐 Admin (hidden from UI but supported)
-    if email == "admin@gmail.com" and password == "1234":
-        return {
-            "status": "success",
-            "message": "Admin login successful"
-        }
-
-    # 👤 Employee
-    if role == "employee":
-        return {
-            "status": "success",
-            "message": "Employee login successful"
-        }
-
-    # 💼 Employer
-    if role == "employer":
-        return {
-            "status": "success",
-            "message": "Employer login successful"
-        }
-
-    return {
-        "status": "error",
-        "message": "Invalid credentials"
-    }, 401
-
 # Run Server
 if __name__ == "__main__":
     print("Starting Flask App...")
