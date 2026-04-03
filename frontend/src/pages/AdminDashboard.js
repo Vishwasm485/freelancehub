@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import "./AdminDashboard.css";
 
 function AdminDashboard({ setPage }) {
+  const getGreeting = () => {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return "Good Morning ☀️, Admin!";
+  if (hour < 18) return "Good Afternoon 🌤️, Admin!";
+  return "Good Evening 🌙, Admin!";
+};
 
   // ✅ Hooks MUST be inside component
   const [stats, setStats] = useState({
@@ -32,12 +39,16 @@ function AdminDashboard({ setPage }) {
         </div>
       </div>
 
-      {/* DASHBOARD */}
       <div className="admin-content">
-        <h2>Welcome Admin 👋</h2>
 
+        {/* Greeting Section */}
+        <div className="welcome-box">
+          <h2>{getGreeting()}</h2>
+          <p>Here’s what’s happening on your platform today</p>
+        </div>
+
+        {/* Grid */}
         <div className="grid">
-
           <div className="card">
             <h3>{stats.employees}</h3>
             <p>Total Employees</p>
@@ -62,10 +73,13 @@ function AdminDashboard({ setPage }) {
             <h3>{stats.resources}</h3>
             <p>Total Resources</p>
           </div>
-
         </div>
-      </div>
 
+      </div>
+    <div className="footer">
+  <p>© 2026 FreelanceHub | Admin Panel</p>
+  <p>{new Date().toLocaleString()}</p>
+</div>
     </div>
   );
 }

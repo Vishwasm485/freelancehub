@@ -25,10 +25,7 @@
 
 /* CONTENT */
 .admin-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
+  padding: 30px;
 }
 
 .admin-card {
@@ -55,26 +52,56 @@
 }
 
 /* GRID */
+/* Welcome Box */
+.welcome-box {
+  margin-bottom: 20px;
+}
+
+.welcome-box h2 {
+  font-size: 30px;
+  font-weight: 600;
+  color: #2f6fed;
+}
+.welcome-box p {
+  color: #666;
+}
+.sub-text {
+  color: gray;
+  margin-top: 5px;
+}
+
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-top: 30px;
 }
 
-/* CARD */
+/* CARD IMPROVED */
 .card {
   background: white;
   padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
 .card h3 {
-  font-size: 28px;
+  font-size: 30px;
   color: #2f6fed;
 }
 
-.card p {
-  margin-top: 10px;
+/* FOOTER */
+.footer {
+  margin-top: 40px;
+  padding: 15px;
+  text-align: center;
+  background: #f1f1f1;
+  color: #555;
+  font-size: 14px;
 }
