@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import EmployeeDashboard from "./pages/EmployeeDashboard";
-import EmployerDashboard from "./pages/EmployerDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-import PostResource from "./pages/PostResource";
-import ViewResources from "./pages/ViewResources";
+import AdminDashboard from "./components/admin/AdminDashboard";
+import PostResource from "./components/admin/PostResource";
+import ViewResources from "./components/admin/ViewResources";
 
-function App() {
+import EmployeeDashboard from "./components/employee/EmployeeDashboard";
+import EmployerDashboard from "./components/employer/EmployerDashboard";
+function App() { 
   const [page, setPage] = useState("home");
 
   const renderPage = () => {
