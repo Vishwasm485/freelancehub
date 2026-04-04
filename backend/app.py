@@ -3,18 +3,19 @@ from flask_cors import CORS
 from flask import request, jsonify
 from flask import send_from_directory
 # Import Blueprints
-from routes.auth_routes import auth_bp
-from routes.employer_routes import employer_bp
-from routes.employee_routes import employee_bp
-from routes.admin_routes import admin_bp
-from routes.chat_routes import chat_bp
+from routes.admin.routes import admin_bp
+from routes.employee.routes import employee_bp
+from routes.employer.routes import employer_bp
+from routes.auth.routes import auth_bp
+from routes.chat.routes import chat_bp
 import os
 
 # Initialize App
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads", "resources")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "resources")
 
 @app.route('/uploads/resources/<path:filename>')
 def serve_file(filename):
