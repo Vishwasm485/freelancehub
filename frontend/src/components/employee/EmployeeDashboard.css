@@ -1,0 +1,60 @@
+/* NAVBAR */
+.navbar {
+  background: #2f6fed;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: #1e4fd1;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* PROFILE */
+.container {
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.profile-title {
+  text-align: center;
+  color: #2f6fed;
+  margin-top: 40px;
+}
+
+.profile-card {
+  width: 500px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  text-align: center;
+}
+
+.profile-img {
+  border-radius: 50%;
+  border: 3px solid #2f6fed;
+}
+
+.contact {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background: #2f6fed;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border-radius: 5px;
+}
