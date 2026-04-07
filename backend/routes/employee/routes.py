@@ -3,107 +3,99 @@ from database import get_cursor
 
 employee_bp = Blueprint('employee', __name__)
 
-# PLACE BID
+# ✅ GET ALL PROJECTS
+@employee_bp.route('/projects', methods=['GET'])
+def get_all_projects():
+    conn, cursor = get_cursor()
+
+    cursor.execute("SELECT * FROM projects ORDER BY id DESC")
+    projects = cursor.fetchall()
+
+    conn.close()
+    return jsonify(projects)
+
+
+# ✅ GET LOWEST BID
+@employee_bp.route('/lowest-bid/<int:project_id>', methods=['GET'])
+def get_lowest_bid(project_id):
+    conn, cursor = get_cursor()
+
+    cursor.execute("""
+        SELECT MIN(bid_amount) AS lowest 
+        FROM bids WHERE project_id=%s
+    """, (project_id,))
+
+    result = cursor.fetchone()
+    conn.close()
+
+    return jsonify({
+        "lowest": float(result['lowest']) if result['lowest'] else 0
+    })
+# ✅ PLACE BID
 @employee_bp.route('/bid', methods=['POST'])
 def place_bid():
     data = request.json
+
+    try:
+        project_id = int(data['project_id'])
+        employee_id = int(data['employee_id'])
+        bid_amount = float(data['bid_amount'])
+    except:
+        return jsonify({"error": "Invalid input"}), 400
+
     conn, cursor = get_cursor()
 
-    # Check duplicate bid
-    cursor.execute("""
-        SELECT * FROM bids WHERE project_id=%s AND employee_id=%s
-    """, (data['project_id'], data['employee_id']))
+    # 🔹 Get project
+    cursor.execute("SELECT budget FROM projects WHERE id=%s", (project_id,))
+    project = cursor.fetchone()
 
-    if cursor.fetchone():
-        return jsonify({"error": "You already placed a bid"}), 400
+    if not project:
+        return jsonify({"error": "Project not found"}), 404
 
-    # Insert bid
+    budget = float(project['budget'] or 0)
+
+    # ❌ Rule 1: Budget check
+    if bid_amount > budget:
+        return jsonify({"error": "Bid cannot exceed project budget"}), 400
+
+    # 🔹 Global lowest bid
     cursor.execute("""
-        INSERT INTO bids (project_id, employee_id, bid_amount, proposal)
-        VALUES (%s,%s,%s,%s)
-    """, (
-        data['project_id'],
-        data['employee_id'],
-        data['bid_amount'],
-        data.get('proposal', '')
-    ))
+        SELECT MIN(bid_amount) AS lowest 
+        FROM bids WHERE project_id=%s
+    """, (project_id,))
+    
+    lowest = cursor.fetchone()['lowest']
+
+    if lowest is not None:
+        lowest = float(lowest)
+
+    # ❌ Rule 2: Must beat lowest bid
+    if lowest is not None and bid_amount >= lowest:
+        return jsonify({"error": "Bid must be lower than current lowest bid"}), 400
+
+    # 🔹 User's own previous bid
+    cursor.execute("""
+        SELECT MIN(bid_amount) AS my_lowest
+        FROM bids 
+        WHERE project_id=%s AND employee_id=%s
+    """, (project_id, employee_id))
+
+    my = cursor.fetchone()['my_lowest']
+
+    if my is not None:
+        my = float(my)
+
+    # ❌ Rule 3: Must beat own previous bid
+    if my is not None and bid_amount >= my:
+        return jsonify({"error": "New bid must be lower than your previous bid"}), 400
+
+    # ✅ Insert (multiple bids allowed)
+    cursor.execute("""
+        INSERT INTO bids (project_id, employee_id, bid_amount)
+        VALUES (%s,%s,%s)
+    """, (project_id, employee_id, bid_amount))
 
     conn.commit()
     conn.close()
 
     return jsonify({"message": "Bid placed successfully"})
-# UPDATE PROGRESS
-@employee_bp.route('/progress', methods=['POST'])
-def update_progress():
-    data = request.json
-    conn, cursor = get_cursor()
-
-    assignment_id = data['assignment_id']
-    percentage = data['percentage']
-    details = data.get('details', '')
-
-    # Validate percentage
-    if percentage < 0 or percentage > 100:
-        return jsonify({"error": "Invalid percentage"}), 400
-
-    # Get latest progress
-    cursor.execute("""
-        SELECT completion_percentage 
-        FROM progress 
-        WHERE assignment_id=%s
-        ORDER BY updated_at DESC LIMIT 1
-    """, (assignment_id,))
-    last = cursor.fetchone()
-
-    if last and percentage < last['completion_percentage']:
-        return jsonify({"error": "Cannot decrease progress"}), 400
-
-    # Insert progress
-    cursor.execute("""
-        INSERT INTO progress (assignment_id, completion_percentage, details)
-        VALUES (%s,%s,%s)
-    """, (assignment_id, percentage, details))
-
-    conn.commit()
-    conn.close()
-
-    return jsonify({"message": "Progress updated"})
-    # GET ALL PROJECTS
-@employee_bp.route('/projects', methods=['GET'])
-def get_all_projects():
-    conn, cursor = get_cursor()
-
-    cursor.execute("""
-        SELECT 
-            p.id, p.title, p.description, p.budget,
-            b.id AS bid_id, b.employee_id, b.bid_amount
-        FROM projects p
-        LEFT JOIN bids b ON p.id = b.project_id
-        WHERE p.status='open'
-    """)
-
-    rows = cursor.fetchall()
-    
-    projects = {}
-
-    for row in rows:
-        pid = row['id']
-
-        if pid not in projects:
-            projects[pid] = {
-                "id": pid,
-                "title": row['title'],
-                "description": row['description'],
-                "budget": row['budget'],
-                "bids": []
-            }
-
-        if row['bid_id']:
-            projects[pid]["bids"].append({
-                "id": row['bid_id'],
-                "employee_id": row['employee_id'],
-                "bid_amount": row['bid_amount']
-            })
-    conn.close()
-    return jsonify(list(projects.values()))
-  

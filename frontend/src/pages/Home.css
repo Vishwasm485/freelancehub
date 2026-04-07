@@ -1,0 +1,49 @@
+/* PAGE */
+.home-container {
+  height: 100vh;
+  background: linear-gradient(135deg, #2f6fed, #1e4fd1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* CARD */
+.home-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* TITLE */
+.home-card h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+/* SUBTEXT */
+.home-card p {
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+/* BUTTONS */
+.home-btn {
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  color: #2f6fed;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.home-btn:hover {
+  transform: scale(1.05);
+}

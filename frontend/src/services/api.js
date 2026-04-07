@@ -15,3 +15,4 @@ export const loginUser = async (data) => {
     body: JSON.stringify(data)
   }).then(res => res.json());
 };
+

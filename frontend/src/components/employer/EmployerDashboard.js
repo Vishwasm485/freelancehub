@@ -1,119 +1,75 @@
 import { useEffect, useState } from "react";
+import "./EmployerDashboard.css";
 
-function EmployerDashboard() {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const employer_id = user?.user_id;
+function EmployerDashboard({ setPage }) {
+  const [user, setUser] = useState(null);
 
-  const [projects, setProjects] = useState([]);
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    budget: ""
-  });
-
-  // 🔐 Protect route + load projects
   useEffect(() => {
-    if (!user) {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (!storedUser) {
       alert("Please login first");
       window.location.href = "/";
       return;
     }
 
-    fetch(`http://127.0.0.1:5000/api/employer/projects/${employer_id}`)
+    fetch(`http://127.0.0.1:5000/api/user/${storedUser.user_id}`)
       .then(res => res.json())
-      .then(data => setProjects(data));
+      .then(data => setUser(data))
+      .catch(err => console.error(err));
   }, []);
 
-  // 📝 Handle input
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  // ➕ Create project
-  const createProject = async () => {
-    if (!form.title || !form.description || !form.budget) {
-      alert("Fill all fields");
-      return;
-    }
-
-    const res = await fetch("http://127.0.0.1:5000/api/employer/create-project", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        ...form,
-        employer_id
-      })
-    });
-
-    const data = await res.json();
-
-    if (data.error) {
-      alert(data.error);
-    } else {
-      alert("Project created successfully ✅");
-
-      // refresh projects
-      setProjects([...projects, data.project]);
-      setForm({ title: "", description: "", budget: "" });
-    }
-  };
+  if (!user) return null;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Employer Dashboard</h2>
+    <div className="emp-container">
 
-      {/* ➕ Create Project */}
-      <div style={{ marginBottom: "20px", border: "1px solid black", padding: "10px" }}>
-        <h3>Create Project</h3>
+      {/* NAVBAR */}
+      <div className="emp-navbar">
+        <h2>FreelanceHub</h2>
 
-        <input
-          name="title"
-          placeholder="Project Title"
-          value={form.title}
-          onChange={handleChange}
-        /><br /><br />
-
-        <textarea
-          name="description"
-          placeholder="Project Description"
-          value={form.description}
-          onChange={handleChange}
-        /><br /><br />
-
-        <input
-          name="budget"
-          placeholder="Budget"
-          value={form.budget}
-          onChange={handleChange}
-        /><br /><br />
-
-        <button onClick={createProject}>Create Project</button>
+        <div>
+          <button>Profile</button>
+          <button onClick={() => setPage("post-project")}>
+            Post Project
+          </button>
+          <button onClick={()=> setPage("view-posts")}>View Posts</button>
+          <button onClick={()=> setPage("assign-tasks")}>View Assigned Tasks</button>
+          <button onClick={() => setPage("home")}>Logout</button>
+        </div>
       </div>
 
-      {/* 📂 Project List */}
-      <h3>Your Projects</h3>
+      {/* PROFILE */}
+      <h2 className="emp-title">PROFILE</h2>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px" }}>
-        {projects.map((p) => (
-          <div key={p.id} style={{ border: "1px solid black", padding: "10px" }}>
-            <h4>{p.title}</h4>
-            <p>{p.description}</p>
-            <p><b>Budget:</b> ₹{p.budget}</p>
+      <div className="emp-card">
 
-            <h5>Bids:</h5>
-            {p.bids && p.bids.length > 0 ? (
-              p.bids.map((b) => (
-                <div key={b.id}>
-                  <p>💰 ₹{b.bid_amount} - Employee {b.employee_id}</p>
-                </div>
-              ))
-            ) : (
-              <p>No bids yet</p>
-            )}
-          </div>
-        ))}
+        <img
+          src={
+            user.profile_pic
+              ? `http://127.0.0.1:5000/${user.profile_pic}`
+              : "/images/profile/default.png"
+          }
+          className="emp-img"
+          alt="profile"
+        />
+
+        <h3>{user.name}</h3>
+        <p>{user.role}</p>
+
+        <div className="emp-info">
+          <p><b>Email:</b> {user.email}</p>
+          <p><b>Phone:</b> {user.phone}</p>
+          <p><b>Gender:</b> {user.gender}</p>
+        </div>
+
+        <button
+          className="emp-btn"
+          onClick={() => setPage("manage-employer")}
+        >
+          Manage Profile
+        </button>
+
       </div>
     </div>
   );

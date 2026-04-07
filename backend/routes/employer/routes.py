@@ -1,24 +1,69 @@
+import os
+
 from flask import Blueprint, request, jsonify
 from database import get_cursor
+from utils.auth import hash_password
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = "uploads/projects"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 employer_bp = Blueprint('employer', __name__)
+
+@employer_bp.route('/update-profile', methods=['POST'])
+def update_profile():
+    data = request.json
+    conn, cursor = get_cursor()
+
+    user_id = data['user_id']
+    phone = data.get('phone')
+    password = data.get('password')
+
+    if password:
+        password = hash_password(password)
+
+    cursor.execute("""
+        UPDATE users
+        SET phone=%s, password=%s
+        WHERE id=%s
+    """, (phone, password, user_id))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Profile updated successfully"})
 
 # POST PROJECT
 @employer_bp.route('/projects', methods=['POST'])
 def post_project():
-    data = request.json
     conn, cursor = get_cursor()
 
+    title = request.form.get("title")
+    description = request.form.get("description")
+    skills = request.form.get("skills")
+    budget = request.form.get("budget")
+    deadline = request.form.get("deadline")
+    employer_id = request.form.get("employer_id")
+
+    file = request.files.get("file")
+    file_path = None
+
+    if file:
+        filename = secure_filename(file.filename)
+
+        # ❌ BLOCK VIDEO FILES
+        if filename.lower().endswith((".mp4", ".avi", ".mov", ".mkv")):
+            return jsonify({"error": "Video files not allowed"}), 400
+
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(file_path)
+
     cursor.execute("""
-        INSERT INTO projects (employer_id, title, description, skills, budget, deadline)
-        VALUES (%s,%s,%s,%s,%s,%s)
+        INSERT INTO projects 
+        (employer_id, title, description, skills, budget, deadline, file_path)
+        VALUES (%s,%s,%s,%s,%s,%s,%s)
     """, (
-        data['employer_id'],
-        data['title'],
-        data['description'],
-        data['skills'],
-        data['budget'],
-        data['deadline']
+        employer_id, title, description, skills, budget, deadline, file_path
     ))
 
     conn.commit()
@@ -26,106 +71,141 @@ def post_project():
 
     return jsonify({"message": "Project posted successfully"})
 # GET MY PROJECTS
-@employer_bp.route('/projects/<int:employer_id>', methods=['GET'])
+@employer_bp.route('/projects/<employer_id>', methods=['GET'])
 def get_projects(employer_id):
     conn, cursor = get_cursor()
 
     cursor.execute("""
-        SELECT * FROM projects WHERE employer_id=%s
+        SELECT * FROM projects 
+        WHERE employer_id=%s
+        ORDER BY id DESC
     """, (employer_id,))
 
     projects = cursor.fetchall()
+
     conn.close()
 
     return jsonify(projects)
+
+@employer_bp.route('/delete-project/<int:project_id>', methods=['DELETE', 'OPTIONS'])
+def delete_project(project_id):
+    if request.method == 'OPTIONS':
+        return '', 200
+
+    conn, cursor = get_cursor()
+
+    cursor.execute("DELETE FROM projects WHERE id=%s", (project_id,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Project deleted successfully"})
+
 # VIEW BIDS
 @employer_bp.route('/bids/<int:project_id>', methods=['GET'])
 def view_bids(project_id):
     conn, cursor = get_cursor()
 
     cursor.execute("""
-        SELECT b.*, u.name, u.email, u.phone
+        SELECT 
+            b.project_id,
+            b.employee_id,
+            b.bid_amount,
+            u.name AS name,
+            u.email AS email,
+            u.phone AS phone,
+            u.gender AS gender
         FROM bids b
         JOIN users u ON b.employee_id = u.id
-        WHERE b.project_id=%s
+        WHERE b.project_id = %s
         ORDER BY b.bid_amount ASC
+        LIMIT 1
     """, (project_id,))
 
-    bids = cursor.fetchall()
+    bid = cursor.fetchone()
     conn.close()
 
-    return jsonify(bids)
+    if not bid:
+        return jsonify({"error": "No bids yet"}), 404
+
+    return jsonify(bid)
+
+
+# ==============================
 # ASSIGN PROJECT
+# ==============================
 @employer_bp.route('/assign', methods=['POST'])
 def assign_project():
     data = request.json
+
+    project_id = data.get('project_id')
+    employee_id = data.get('employee_id')
+    bid_amount = data.get('bid_amount')
+
+    if not project_id or not employee_id or not bid_amount:
+        return jsonify({"error": "Missing data"}), 400
+
     conn, cursor = get_cursor()
 
-    project_id = data['project_id']
-    employee_id = data['employee_id']
-    agreed_amount = data['agreed_amount']
+    try:
+        # ✅ STEP 1: GET PROJECT
+        cursor.execute(
+            "SELECT * FROM projects WHERE id=%s",
+            (project_id,)
+        )
+        project = cursor.fetchone()
 
-    # 1. Update selected bid → accepted
-    cursor.execute("""
-        UPDATE bids
-        SET status='accepted'
-        WHERE project_id=%s AND employee_id=%s
-    """, (project_id, employee_id))
+        if not project:
+            return jsonify({"error": "Project not found"}), 404
 
-    # 2. Reject all other bids
-    cursor.execute("""
-        UPDATE bids
-        SET status='rejected'
-        WHERE project_id=%s AND employee_id!=%s
-    """, (project_id, employee_id))
+        # ✅ STEP 2: INSERT INTO ASSIGNMENTS
+        cursor.execute("""
+            INSERT INTO assignments 
+            (project_id, employee_id, agreed_amount, deadline)
+            VALUES (%s,%s,%s,%s)
+        """, (
+            project_id,
+            employee_id,
+            bid_amount,
+            project['deadline']
+        ))
 
-    # 3. Create assignment
-    cursor.execute("""
-        INSERT INTO assignments (project_id, employee_id, agreed_amount, deadline)
-        SELECT id, %s, %s, deadline FROM projects WHERE id=%s
-    """, (employee_id, agreed_amount, project_id))
+        # ✅ STEP 3: DELETE PROJECT
+        cursor.execute(
+            "DELETE FROM projects WHERE id=%s",
+            (project_id,)
+        )
 
-    # 4. Update project status
-    cursor.execute("""
-        UPDATE projects
-        SET status='assigned'
-        WHERE id=%s
-    """, (project_id,))
+        # ✅ STEP 4: COMMIT
+        conn.commit()
 
-    conn.commit()
-    conn.close()
+    except Exception as e:
+        conn.rollback()
+        print("ASSIGN ERROR:", str(e))
+        return jsonify({"error": "Assignment failed"}), 500
 
-    return jsonify({"message": "Project assigned successfully"})
-# GET ACTIVE ASSIGNMENTS (EMPLOYER)
+    finally:
+        conn.close()
+
+    return jsonify({"message": "Task assigned successfully"})
+
+# ==============================
+# GET ASSIGNED TASKS
+# ==============================
 @employer_bp.route('/assignments/<int:employer_id>', methods=['GET'])
 def get_assignments(employer_id):
     conn, cursor = get_cursor()
-    cursor.execute("""
-        SELECT 
-            a.id AS assignment_id,
-            p.title,
-            p.description,
-            p.skills,
-            p.budget,
-            p.deadline,
-            a.agreed_amount,
-            a.assigned_date,
-            u.name AS employee_name,
-            u.email,
-            u.phone,
-            IFNULL(SUM(pay.amount_paid), 0) AS total_paid
-        FROM assignments a
-        JOIN projects p ON a.project_id = p.id
-        JOIN users u ON a.employee_id = u.id
-        LEFT JOIN payments pay ON a.id = pay.assignment_id
-        WHERE p.employer_id = %s
-        GROUP BY a.id
-    """, (employer_id,))
 
-    assignments = cursor.fetchall()
+    cursor.execute("""
+        SELECT a.*, u.name, u.email, u.phone
+        FROM assignments a
+        JOIN users u ON a.employee_id = u.id
+    """)
+
+    data = cursor.fetchall()
     conn.close()
 
-    return jsonify(assignments)
+    return jsonify(data)
+
 # MAKE PAYMENT
 @employer_bp.route('/payment', methods=['POST'])
 def make_payment():

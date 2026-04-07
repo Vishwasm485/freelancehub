@@ -1,0 +1,93 @@
+.vp-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eef2f7, #dbe6f6);
+}
+
+.vp-navbar {
+  background: #2f6fed;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vp-navbar button {
+  margin-left: 10px;
+  background: #1e4fd1;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.active {
+  background: #ff4d4d;
+}
+
+.vp-search {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.vp-search input {
+  width: 400px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.vp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.vp-card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.vp-card h3 {
+  color: #2f6fed;
+}
+
+.desc {
+  margin: 10px 0;
+}
+
+.skills span {
+  background: #e3ecff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.attach {
+  display: block;
+  margin-top: 10px;
+  color: #2f6fed;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.delete {
+  background: red;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+}
+
+.bids {
+  background: #2f6fed;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+}

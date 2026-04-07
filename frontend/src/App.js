@@ -6,7 +6,16 @@ import PostResource from "./components/admin/PostResource";
 import ViewResources from "./components/admin/ViewResources";
 
 import EmployeeDashboard from "./components/employee/EmployeeDashboard";
+import Home from "./pages/Home";
+import ManageProfile from "./components/employee/ManageProfile";
+import ManageEmployerProfile from "./components/employer/ManageEmployerProfile";
+import EmployeeResources from "./components/employee/EmployeeResources";
+import EmployeeProjects from "./components/employee/EmployeeProjects";
+
 import EmployerDashboard from "./components/employer/EmployerDashboard";
+import PostProject from "./components/employer/PostProject";
+import ViewPosts from "./components/employer/ViewPosts";
+
 function App() { 
   const [page, setPage] = useState("home");
 
@@ -25,21 +34,24 @@ function App() {
       case "view-resources":
         return <ViewResources setPage={setPage} />;
       case "employee":
-        return <EmployeeDashboard />;
+        return <EmployeeDashboard setPage={setPage} />;
+      case "manage-profile":
+        return <ManageProfile setPage={setPage} />;
+      case "employee-resources":
+        return <EmployeeResources setPage={setPage} />;
+      case "employee-projects":
+        return <EmployeeProjects setPage={setPage} />;
       case "employer":
-        return <EmployerDashboard />;
-      default:
-        return (
-          <div style={{ textAlign: "center", marginTop: "100px" }}>
-            <h1>FreelanceHub</h1>
-            <p>Find the Best Freelancers</p>
+        return <EmployerDashboard setPage={setPage} />;
 
-            <button onClick={() => setPage("login")}>Login</button>
-            <button onClick={() => setPage("signup")} style={{ marginLeft: "10px" }}>
-              Signup
-            </button>
-          </div>
-        );
+      case "manage-employer":
+        return <ManageEmployerProfile setPage={setPage} />;
+      case "post-project":
+        return <PostProject setPage={setPage} />;
+      case "view-posts":
+        return <ViewPosts setPage={setPage} />;
+      default:
+        return <Home setPage={setPage} />;
     }
   };
 

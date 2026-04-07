@@ -21,6 +21,13 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "resources")
 def serve_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+@app.route('/uploads/profile/<path:filename>')
+def serve_profile(filename):
+    return send_from_directory(
+        os.path.join(BASE_DIR, 'uploads', 'profile'),
+        filename
+    )
+
 # 🔹 Register Blueprints
 app.register_blueprint(auth_bp, url_prefix="/api")
 app.register_blueprint(employer_bp, url_prefix="/api/employer")
@@ -31,4 +38,5 @@ app.register_blueprint(chat_bp, url_prefix="/api/chat")
 # Run Server
 if __name__ == "__main__":
     print("Starting Flask App...")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    print(app.url_map)
+    app.run(debug=True, host="0.0.0.0", port=5000, use_reloader=False)

@@ -1,0 +1,85 @@
+.post-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eef2f7, #dbe6f6);
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* NAVBAR */
+.post-navbar {
+  background: linear-gradient(90deg, #2f6fed, #1e4fd1);
+  color: white;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-navbar button {
+  margin-left: 10px;
+  padding: 8px 14px;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.post-navbar .active {
+  background: #ff4d4d;
+}
+
+/* CARD */
+.post-card {
+  width: 500px;
+  margin: 40px auto;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.post-card h2 {
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+.post-card input,
+.post-card textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+.post-card textarea {
+  height: 100px;
+}
+
+/* ROW */
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.row div {
+  flex: 1;
+}
+
+/* BUTTON */
+.submit-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background: #2f6fed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #1e4fd1;
+}

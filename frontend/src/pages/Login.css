@@ -1,0 +1,80 @@
+/* PAGE BACKGROUND */
+.login-container {
+  height: 100vh;
+  background: linear-gradient(135deg, #2f6fed, #1e4fd1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* CARD */
+.login-card {
+  width: 350px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  color: white;
+  text-align: center;
+}
+
+/* TITLE */
+.login-card h2 {
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+.login-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+/* RADIO GROUP */
+.role-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.role-group label {
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+/* BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background: white;
+  color: #2f6fed;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  transform: scale(1.05);
+}
+
+/* MESSAGE */
+.message {
+  margin-top: 10px;
+  color: #ffdddd;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  margin-top: 10px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+}

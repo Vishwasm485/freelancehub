@@ -5,9 +5,8 @@ from database import get_cursor
 
 admin_bp = Blueprint('admin', __name__)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "..", "uploads", "resources")
-UPLOAD_FOLDER = os.path.abspath(UPLOAD_FOLDER)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "resources")
 print("Exists:", os.path.exists(UPLOAD_FOLDER))
 print("Is Dir:", os.path.isdir(UPLOAD_FOLDER))
 print("Is File:", os.path.isfile(UPLOAD_FOLDER))
@@ -36,12 +35,13 @@ def add_resource():
 
         # SAVE FILE
         filename = secure_filename(file.filename)
-        filepath = os.path.join(UPLOAD_FOLDER, filename)
 
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
 
-        # Store relative path for frontend
+        # Path to store in DB (relative for frontend)
         db_path = f"uploads/resources/{filename}"
+
         file_type = filename.rsplit('.', 1)[1]
         uploaded_by = 1
         conn, cursor = get_cursor()

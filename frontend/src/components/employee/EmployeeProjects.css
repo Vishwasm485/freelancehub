@@ -1,0 +1,67 @@
+.emp-page {
+  background: linear-gradient(135deg, #eef2f7, #dbe6f6);
+  min-height: 100vh;
+}
+
+.emp-navbar {
+  background: #2f6fed;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.emp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px,1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.emp-card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.skills span {
+  background: #e3ecff;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 20px;
+}
+
+.bid-btn {
+  margin-top: 10px;
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px;
+}
+
+/* POPUP */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+}

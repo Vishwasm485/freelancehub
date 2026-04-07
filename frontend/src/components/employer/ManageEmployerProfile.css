@@ -1,0 +1,30 @@
+.mp-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mp-card {
+  width: 350px;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.mp-card input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.mp-card button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: #2f6fed;
+  color: white;
+  border: none;
+}
