@@ -8,10 +8,14 @@ employee_bp = Blueprint('employee', __name__)
 def get_all_projects():
     conn, cursor = get_cursor()
 
-    cursor.execute("SELECT * FROM projects ORDER BY id DESC")
-    projects = cursor.fetchall()
+    cursor.execute("""
+        SELECT * FROM projects 
+        WHERE status='open'
+    """)
 
+    projects = cursor.fetchall()
     conn.close()
+
     return jsonify(projects)
 
 
@@ -99,3 +103,29 @@ def place_bid():
     conn.close()
 
     return jsonify({"message": "Bid placed successfully"})
+@employee_bp.route('/assigned/<int:employee_id>', methods=['GET'])
+def get_employee_tasks(employee_id):
+    conn, cursor = get_cursor()
+
+    cursor.execute("""
+        SELECT 
+            a.id AS assignment_id,
+            a.agreed_amount,
+            p.title,
+            p.description,
+            p.skills,
+            p.deadline,
+            p.file_path,
+            u.name AS employer_name,
+            u.email,
+            u.phone
+        FROM assignments a
+        JOIN projects p ON a.project_id = p.id
+        JOIN users u ON p.employer_id = u.id
+        WHERE a.employee_id = %s
+    """, (employee_id,))
+
+    data = cursor.fetchall()
+    conn.close()
+
+    return jsonify(data)
