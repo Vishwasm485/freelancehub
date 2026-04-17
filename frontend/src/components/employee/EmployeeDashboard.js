@@ -35,7 +35,9 @@ function EmployeeDashboard({ setPage }) {
         <div>
           <button>Profile</button>
           <button onClick={()=>setPage("employee-projects")}>View Posts</button>
-          <button>My Tasks</button>
+          <button onClick={() => setPage("employee-tasks")}>
+            My Tasks
+          </button>
           <button onClick={() => setPage("employee-resources")}>
             Resources
           </button>
