@@ -11,6 +11,7 @@ import ManageProfile from "./components/employee/ManageProfile";
 import ManageEmployerProfile from "./components/employer/ManageEmployerProfile";
 import EmployeeResources from "./components/employee/EmployeeResources";
 import EmployeeProjects from "./components/employee/EmployeeProjects";
+import EmployeeTasks from "./components/employee/EmployeeTasks";
 
 import EmployerDashboard from "./components/employer/EmployerDashboard";
 import PostProject from "./components/employer/PostProject";
@@ -41,6 +42,8 @@ function App() {
         return <EmployeeResources setPage={setPage} />;
       case "employee-projects":
         return <EmployeeProjects setPage={setPage} />;
+      case "employee-tasks":
+        return <EmployeeTasks setPage={setPage} />;
       case "employer":
         return <EmployerDashboard setPage={setPage} />;
 
