@@ -169,11 +169,12 @@ def assign_project():
             project['deadline']
         ))
 
-        # ✅ STEP 3: DELETE PROJECT
-        cursor.execute(
-            "DELETE FROM projects WHERE id=%s",
-            (project_id,)
-        )
+        # ✅ STEP 3: UPDATE PROJECT STATUS (IMPORTANT)
+        cursor.execute("""
+            UPDATE projects
+            SET status = 'assigned'
+            WHERE id=%s
+        """, (project_id,))
 
         # ✅ STEP 4: COMMIT
         conn.commit()
@@ -196,9 +197,19 @@ def get_assignments(employer_id):
     conn, cursor = get_cursor()
 
     cursor.execute("""
-        SELECT a.*, u.name, u.email, u.phone
+        SELECT 
+            a.*,
+            p.title,
+            p.description,
+            p.skills,
+            p.file_path,
+            u.name,
+            u.email,
+            u.phone
         FROM assignments a
+        JOIN projects p ON a.project_id = p.id
         JOIN users u ON a.employee_id = u.id
+        WHERE p.employer_id = %s
     """)
 
     data = cursor.fetchall()
