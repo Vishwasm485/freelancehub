@@ -43,7 +43,7 @@ def add_resource():
         db_path = f"uploads/resources/{filename}"
 
         file_type = filename.rsplit('.', 1)[1]
-        uploaded_by = 1
+        uploaded_by = request.form.get("uploaded_by")
         conn, cursor = get_cursor()
 
         cursor.execute("""

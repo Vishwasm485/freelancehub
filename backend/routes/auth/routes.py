@@ -2,8 +2,8 @@ import random
 from datetime import datetime
 from flask import Blueprint, request, jsonify
 from database import get_cursor
-from utils.auth import hash_password, check_password
 from utils.otp import generate_otp, get_expiry
+from werkzeug.security import generate_password_hash, check_password_hash
 
 auth_bp = Blueprint('auth', __name__)
 print("AUTH FILE LOADED")
@@ -19,7 +19,7 @@ def register():
     if cursor.fetchone():
         return jsonify({"error": "User already exists"}), 400
 
-    hashed = hash_password(data['password'])
+    hashed = generate_password_hash(data['password'])
 
     cursor.execute("""
         INSERT INTO users (name, gender, email, phone, password, role)
@@ -108,10 +108,11 @@ def login():
     cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
     user = cursor.fetchone()
 
+
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    if not check_password(password, user['password']):
+    if not check_password_hash(user['password'], password):
         return jsonify({"error": "Wrong password"}), 401
 
     if user['role'] != role:

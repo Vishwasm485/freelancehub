@@ -1,0 +1,126 @@
+.assign-page {
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.navbar {
+  background: linear-gradient(to right, #2563eb, #1e40af);
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.navbar .active {
+  background: red;
+  color: white;
+}
+
+.container {
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  color: #2563eb;
+}
+
+.btns {
+  margin-top: 10px;
+}
+
+.btns button {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.status {
+  background: #2563eb;
+  color: white;
+}
+
+.payment {
+  background: #16a34a;
+  color: white;
+}
+.upi-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: purple;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+.gpay {
+  background: #4285f4;
+  color: white;
+  margin-top: 8px;
+}
+
+.phonepe {
+  background: #6f1ab6;
+  color: white;
+  margin-top: 8px;
+}
+
+.qr-box {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.qr-box img {
+  width: 180px;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+.razorpay-btn {
+  background: black;
+  color: white;
+  margin-top: 10px;
+}
+.chat {
+  background: #4f46e5;
+  color: white;
+}
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.chat-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px;
+}

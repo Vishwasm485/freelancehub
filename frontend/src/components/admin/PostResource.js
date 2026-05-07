@@ -23,15 +23,20 @@ function PostResource({ setPage }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(user); // 👈 ADD HERE
+
     if (!form.title || !form.skill || !form.file || !form.description) {
       alert("Please fill all fields");
       return;
     }
+  
     const data = new FormData();
     data.append("title", form.title);
     data.append("description", form.description);
     data.append("skill", form.skill);
     data.append("file", form.file);
+    data.append("uploaded_by", user.user_id);
 
     try {
       const res = await fetch("http://127.0.0.1:5000/api/admin/add-resource", {

@@ -16,6 +16,7 @@ import EmployeeTasks from "./components/employee/EmployeeTasks";
 import EmployerDashboard from "./components/employer/EmployerDashboard";
 import PostProject from "./components/employer/PostProject";
 import ViewPosts from "./components/employer/ViewPosts";
+import AssignedTasks from "./components/employer/AssignedTasks";
 
 function App() { 
   const [page, setPage] = useState("home");
@@ -53,6 +54,8 @@ function App() {
         return <PostProject setPage={setPage} />;
       case "view-posts":
         return <ViewPosts setPage={setPage} />;
+      case "assigned-tasks":
+        return <AssignedTasks setPage={setPage} />;
       default:
         return <Home setPage={setPage} />;
     }

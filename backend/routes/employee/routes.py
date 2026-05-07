@@ -103,6 +103,7 @@ def place_bid():
     conn.close()
 
     return jsonify({"message": "Bid placed successfully"})
+
 @employee_bp.route('/assigned/<int:employee_id>', methods=['GET'])
 def get_employee_tasks(employee_id):
     conn, cursor = get_cursor()
@@ -123,9 +124,107 @@ def get_employee_tasks(employee_id):
         JOIN projects p ON a.project_id = p.id
         JOIN users u ON p.employer_id = u.id
         WHERE a.employee_id = %s
+        GROUP BY a.project_id
+        ORDER BY a.id DESC
     """, (employee_id,))
 
     data = cursor.fetchall()
     conn.close()
 
     return jsonify(data)
+@employee_bp.route('/update-progress', methods=['POST'])
+def update_progress():
+    data = request.json
+
+    assignment_id = data.get('assignment_id')
+    completion = data.get('completion_percentage')
+    details = data.get('details')
+
+    conn, cursor = get_cursor()
+
+    cursor.execute("""
+        INSERT INTO progress (assignment_id, completion_percentage, details)
+        VALUES (%s, %s, %s)
+    """, (assignment_id, completion, details))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"message": "Progress updated"})
+@employee_bp.route('/payment-history/<int:assignment_id>', methods=['GET'])
+def get_payment_history(assignment_id):
+    conn, cursor = get_cursor()
+
+    cursor.execute("""
+        SELECT agreed_amount FROM assignments WHERE id=%s
+    """, (assignment_id,))
+    row = cursor.fetchone()
+
+    if not row:
+        return jsonify({"error": "Assignment not found"}), 404
+
+    agreed = float(row['agreed_amount'])
+
+    cursor.execute("""
+        SELECT id, amount_paid, payment_date
+        FROM payments
+        WHERE assignment_id=%s
+        ORDER BY payment_date DESC
+    """, (assignment_id,))
+    payments = cursor.fetchall()
+
+    # 🔥 FIX: convert datetime → string
+    for p in payments:
+        if p.get('payment_date'):
+            p['payment_date'] = p['payment_date'].strftime('%Y-%m-%d %H:%M:%S')
+        else:
+            p['payment_date'] = None
+
+
+    cursor.execute("""
+        SELECT IFNULL(SUM(amount_paid), 0) AS total_paid
+        FROM payments
+        WHERE assignment_id=%s
+    """, (assignment_id,))
+    total_paid = float(cursor.fetchone()['total_paid'])
+
+    conn.close()
+
+    return jsonify({
+        "agreed": agreed,
+        "received": total_paid,
+        "remaining": agreed - total_paid,
+        "history": payments
+    })
+@employee_bp.route('/status/<int:assignment_id>', methods=['GET'])
+def employee_view_status(assignment_id):
+    conn, cursor = get_cursor()
+
+    # get deadline
+    cursor.execute("""
+        SELECT p.deadline
+        FROM assignments a
+        JOIN projects p ON a.project_id = p.id
+        WHERE a.id=%s
+    """, (assignment_id,))
+    row = cursor.fetchone()
+
+    if not row:
+        return jsonify({"error": "Assignment not found"}), 404
+
+    # latest progress
+    cursor.execute("""
+        SELECT completion_percentage, details
+        FROM progress
+        WHERE assignment_id=%s
+        ORDER BY id DESC LIMIT 1
+    """, (assignment_id,))
+    prog = cursor.fetchone()
+
+    conn.close()
+
+    return jsonify({
+        "completion_percentage": prog['completion_percentage'] if prog else 0,
+        "details": prog['details'] if prog else "No updates yet",
+        "deadline": row['deadline']
+    })

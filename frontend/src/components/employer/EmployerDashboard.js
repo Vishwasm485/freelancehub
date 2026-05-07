@@ -34,7 +34,7 @@ function EmployerDashboard({ setPage }) {
             Post Project
           </button>
           <button onClick={()=> setPage("view-posts")}>View Posts</button>
-          <button onClick={()=> setPage("assign-tasks")}>View Assigned Tasks</button>
+          <button onClick={()=> setPage("assigned-tasks")}>View Assigned Tasks</button>
           <button onClick={() => setPage("home")}>Logout</button>
         </div>
       </div>

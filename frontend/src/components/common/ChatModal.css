@@ -1,0 +1,109 @@
+.chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-container {
+  width: 400px;
+  height: 550px;
+  background: #ece5dd;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* HEADER */
+.chat-header {
+  background: #075e54;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* MESSAGES AREA */
+.chat-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ROW (controls left/right alignment) */
+.chat-row {
+  display: flex;
+  margin: 6px 0;
+}
+
+/* LEFT (your message) */
+.chat-row.left {
+  justify-content: flex-start;
+}
+
+/* RIGHT (other user) */
+.chat-row.right {
+  justify-content: flex-end;
+}
+
+/* BUBBLE */
+.chat-bubble {
+  max-width: 70%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* YOUR MESSAGE */
+.chat-row.left .chat-bubble {
+  background: #dcf8c6;
+  border-bottom-left-radius: 0;
+}
+
+/* RECEIVED MESSAGE */
+.chat-row.right .chat-bubble {
+  background: white;
+  border-bottom-right-radius: 0;
+}
+
+/* TIME */
+.msg-time {
+  font-size: 10px;
+  color: gray;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* INPUT AREA */
+.chat-footer {
+  display: flex;
+  padding: 10px;
+  background: #f0f0f0;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+}
+
+.chat-footer button {
+  margin-left: 10px;
+  padding: 8px 15px;
+  background: #25d366;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+}

@@ -15,18 +15,22 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "resources")
+
+RESOURCE_UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "resources")
+PROFILE_UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "profile")
+PROJECT_UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "projects")
 
 @app.route('/uploads/resources/<path:filename>')
-def serve_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+def serve_resource(filename):
+    return send_from_directory(RESOURCE_UPLOAD_FOLDER, filename)
 
 @app.route('/uploads/profile/<path:filename>')
 def serve_profile(filename):
-    return send_from_directory(
-        os.path.join(BASE_DIR, 'uploads', 'profile'),
-        filename
-    )
+    return send_from_directory(PROFILE_UPLOAD_FOLDER, filename)
+
+@app.route('/uploads/projects/<path:filename>')
+def serve_project(filename):
+    return send_from_directory(PROJECT_UPLOAD_FOLDER, filename)
 
 # 🔹 Register Blueprints
 app.register_blueprint(auth_bp, url_prefix="/api")
