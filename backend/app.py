@@ -10,6 +10,10 @@ from routes.auth.routes import auth_bp
 from routes.chat.routes import chat_bp
 import os
 
+from flask_mail import Mail
+from config import MAIL_CONFIG
+from utils.mail import mail
+
 # Initialize App
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -20,6 +24,9 @@ RESOURCE_UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "resources")
 PROFILE_UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "profile")
 PROJECT_UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads", "projects")
 
+app.config.update(MAIL_CONFIG)
+
+mail.init_app(app)
 @app.route('/uploads/resources/<path:filename>')
 def serve_resource(filename):
     return send_from_directory(RESOURCE_UPLOAD_FOLDER, filename)

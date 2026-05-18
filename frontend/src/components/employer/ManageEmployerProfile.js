@@ -7,6 +7,7 @@ function ManageEmployerProfile({ setPage }) {
   const [confirm, setConfirm] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const [profilePic, setProfilePic] = useState(null);
 
   const handleUpdate = async () => {
     if (password !== confirm) {
@@ -29,6 +30,40 @@ function ManageEmployerProfile({ setPage }) {
     alert(data.message || "Updated");
     setPage("employer");
   };
+  const uploadProfilePic = async () => {
+  if (!profilePic) {
+    alert("Select image first");
+    return;
+  }
+
+  const formData = new FormData();
+
+  formData.append("file", profilePic);
+  formData.append("user_id", user.user_id);
+
+  try {
+    const res = await fetch(
+      "http://127.0.0.1:5000/api/upload-profile",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Profile image updated");
+      window.location.reload();
+    } else {
+      alert(data.error);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed");
+  }
+};
 
   return (
     <div className="mp-container">
@@ -36,6 +71,14 @@ function ManageEmployerProfile({ setPage }) {
       <div className="mp-card">
         <h2>Manage Profile</h2>
 
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setProfilePic(e.target.files[0])}
+        />
+        <button onClick={uploadProfilePic}>
+          Upload Profile Picture
+        </button>
         <input
           placeholder="Phone Number"
           onChange={(e) => setPhone(e.target.value)}

@@ -6,6 +6,7 @@ function ManageProfile({ setPage }) {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -48,6 +49,40 @@ const handleUpdate = async () => {
   }
 };
   if (!user) return null;
+const uploadProfilePic = async () => {
+  if (!profilePic) {
+    alert("Select image first");
+    return;
+  }
+
+  const formData = new FormData();
+
+  formData.append("file", profilePic);
+  formData.append("user_id", user.user_id);
+
+  try {
+    const res = await fetch(
+      "http://127.0.0.1:5000/api/upload-profile",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Profile image updated");
+      window.location.reload();
+    } else {
+      alert(data.error);
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Upload failed");
+  }
+};
 
   return (
     <div className="manage-container">
@@ -75,6 +110,13 @@ const handleUpdate = async () => {
       {/* CARD */}
       <div className="manage-card">
         <h2>Manage Profile</h2>
+        <input
+          type="file"
+          onChange={(e) => setProfilePic(e.target.files[0])}
+        />
+        <button onClick={uploadProfilePic}>
+          Upload Profile Picture
+        </button>
 
         <label>Phone Number</label>
         <input

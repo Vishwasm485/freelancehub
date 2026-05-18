@@ -6,7 +6,7 @@ import PostResource from "./components/admin/PostResource";
 import ViewResources from "./components/admin/ViewResources";
 
 import EmployeeDashboard from "./components/employee/EmployeeDashboard";
-import Home from "./pages/Home";
+import HomePage from "./pages/home/HomePage";
 import ManageProfile from "./components/employee/ManageProfile";
 import ManageEmployerProfile from "./components/employer/ManageEmployerProfile";
 import EmployeeResources from "./components/employee/EmployeeResources";
@@ -57,7 +57,7 @@ function App() {
       case "assigned-tasks":
         return <AssignedTasks setPage={setPage} />;
       default:
-        return <Home setPage={setPage} />;
+        return <HomePage setPage={setPage} />;
     }
   };
 

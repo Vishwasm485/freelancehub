@@ -63,12 +63,12 @@ function EmployeeDashboard({ setPage }) {
           src={
             user.profile_pic
               ? `http://127.0.0.1:5000/${user.profile_pic}`
-              : "/images/profile/default.png"
+              : "https://ui-avatars.com/api/?name=User&background=2563eb&color=fff"
           }
           alt="profile"
           className="profile-img"
           onError={(e) => {
-            e.target.src = "/images/profile/default.png";
+            e.target.src = "/profile/default.png";
           }}
         />
 

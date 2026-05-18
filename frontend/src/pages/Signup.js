@@ -59,7 +59,6 @@ function Signup({ goHome }) {
       setMessage("Passwords do not match");
       return;
     }
-
     if (!emailVerified) {
       setMessage("Email not verified");
       return;
@@ -70,19 +69,24 @@ function Signup({ goHome }) {
       return;
     }
 
-    const data = {
-      ...formData
-    };
+      const data = new FormData();
 
-    
+        data.append("name", formData.name);
+        data.append("gender", formData.gender);
+        data.append("email", formData.email);
+        data.append("phone", formData.phone);
+        data.append("password", formData.password);
+        data.append("role", formData.role);
+        data.append("company", formData.company);
 
-    fetch("http://127.0.0.1:5000/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
+        if (file) {
+          data.append("profile_pic", file);
+        }
+
+        fetch("http://127.0.0.1:5000/api/register", {
+          method: "POST",
+          body: data
+        })
       .then(res => res.json())
       .then(data => {
         if (data.message === "Registered successfully") {

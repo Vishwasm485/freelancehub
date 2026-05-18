@@ -48,7 +48,7 @@ function EmployerDashboard({ setPage }) {
           src={
             user.profile_pic
               ? `http://127.0.0.1:5000/${user.profile_pic}`
-              : "/images/profile/default.png"
+              : "https://ui-avatars.com/api/?name=User&background=2563eb&color=fff"
           }
           className="emp-img"
           alt="profile"

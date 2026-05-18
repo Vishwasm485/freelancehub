@@ -4,66 +4,154 @@ from flask import Blueprint, request, jsonify
 from database import get_cursor
 from utils.otp import generate_otp, get_expiry
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+import os
+from flask_mail import Message
+from utils.mail import mail
 
 auth_bp = Blueprint('auth', __name__)
 print("AUTH FILE LOADED")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+PROFILE_FOLDER = os.path.join(BASE_DIR, "uploads", "profile")
+
+os.makedirs(PROFILE_FOLDER, exist_ok=True)
 # REGISTER
 @auth_bp.route('/register', methods=['POST'])
 def register():
-    data = request.json
+
     conn, cursor = get_cursor()
 
-    # Check existing user
-    cursor.execute("SELECT * FROM users WHERE email=%s OR phone=%s",
-                   (data['email'], data['phone']))
+    name = request.form.get("name")
+    gender = request.form.get("gender")
+    email = request.form.get("email")
+    phone = request.form.get("phone")
+    password = request.form.get("password")
+    role = request.form.get("role")
+
+    profile_pic = request.files.get("profile_pic")
+
+    # CHECK EXISTING USER
+    cursor.execute(
+        "SELECT * FROM users WHERE email=%s OR phone=%s",
+        (email, phone)
+    )
+
     if cursor.fetchone():
         return jsonify({"error": "User already exists"}), 400
 
-    hashed = generate_password_hash(data['password'])
+    hashed = generate_password_hash(password)
 
+    db_path = None
+
+    # SAVE PROFILE IMAGE
+    if profile_pic:
+
+        filename = secure_filename(profile_pic.filename)
+
+        filename = f"{email}_{filename}"
+
+        filepath = os.path.join(PROFILE_FOLDER, filename)
+
+        profile_pic.save(filepath)
+
+        db_path = f"uploads/profile/{filename}"
+
+    # INSERT USER
     cursor.execute("""
-        INSERT INTO users (name, gender, email, phone, password, role)
-        VALUES (%s,%s,%s,%s,%s,%s)
-    """, (data['name'], data.get('gender'), data['email'],
-          data['phone'], hashed, data['role']))
+        INSERT INTO users
+        (name, gender, email, phone, password, role, profile_pic)
+        VALUES (%s,%s,%s,%s,%s,%s,%s)
+    """, (
+        name,
+        gender,
+        email,
+        phone,
+        hashed,
+        role,
+        db_path
+    ))
 
     conn.commit()
     conn.close()
 
-    return jsonify({"message": "Registered successfully"})
+    return jsonify({
+        "message": "Registered successfully"
+    })
 
 
 # SEND OTP
+# SEND OTP
 @auth_bp.route('/send-otp', methods=['POST'])
 def send_otp():
+
     try:
+
         data = request.json
+
         otp = generate_otp()
 
-        print("API HIT")
-        
-        print("DATA:", data)
-        print("OTP GENERATED:", otp)
         conn, cursor = get_cursor()
 
         cursor.execute("""
-            INSERT INTO otp_verification (email, phone, otp, expires_at)
+            INSERT INTO otp_verification
+            (email, phone, otp, expires_at)
+
             VALUES (%s,%s,%s,%s)
         """, (
+
             data.get('email') or None,
             data.get('phone') or None,
             otp,
             get_expiry()
+
         ))
 
         conn.commit()
+
+        # EMAIL OTP
+
+        if data.get("email"):
+
+            msg = Message(
+
+                "FreelanceHub OTP Verification",
+
+                sender="yourgmail@gmail.com",
+
+                recipients=[data.get("email")]
+
+            )
+
+            msg.body = f"""
+Hello,
+
+Your FreelanceHub OTP is:
+
+{otp}
+
+This OTP expires in 5 minutes.
+
+Do not share this OTP with anyone.
+"""
+
+            mail.send(msg)
+
         conn.close()
 
-        return jsonify({"message": "OTP sent"})
+        return jsonify({
+            "message": "OTP sent"
+        })
 
     except Exception as e:
+
         print("ERROR:", str(e))
-        return jsonify({"error": str(e)}), 500
+
+        return jsonify({
+            "error": str(e)
+        }), 500
+    
+    
 # VERIFY OTP
 @auth_bp.route('/verify-otp', methods=['POST'])
 def verify_otp():
@@ -191,3 +279,4 @@ def upload_profile():
     except Exception as e:
         print("UPLOAD ERROR:", str(e))
         return jsonify({"error": "Upload failed"}), 500
+
