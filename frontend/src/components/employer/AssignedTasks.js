@@ -3,6 +3,7 @@ import "./AssignedTasks.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import ChatModal from "../common/ChatModal";
+import EmployerNavbar from "./EmployerNavbar";
 
 function AssignedTasks({ setPage }) {
   const [tasks, setTasks] = useState([]);
@@ -193,19 +194,22 @@ const payWithRazorpay = () => {
   <div className="assign-page">
 
     {/* NAVBAR */}
-    <div className="navbar">
-      <h2>FreelanceHub</h2>
-      <div>
-        <button onClick={() => setPage("employer")}>Profile</button>
-        <button onClick={() => setPage("post-project")}>Post Project</button>
-        <button onClick={() => setPage("view-posts")}>View Posts</button>
-        <button className="active">Assigned Tasks</button>
-        <button onClick={() => setPage("home")}>Logout</button>
-      </div>
+    <EmployerNavbar
+        setPage={setPage}
+        active="assigned"
+      />
+    <div className="assigned-header">
+
+      <h1>Assigned Tasks</h1>
+
+      <p>
+        Monitor freelancer progress,
+        payments and project communication.
+      </p>
+
     </div>
 
     <div className="container">
-      <h2>Assigned Tasks</h2>
 
       {/* ✅ EMPTY STATE */}
       {tasks.length === 0 ? (
@@ -307,10 +311,21 @@ const payWithRazorpay = () => {
 
           <h3>Payment</h3>
 
-          <p><b>Total:</b> ₹{paymentInfo?.agreed}</p>
-          <p><b>Paid:</b> ₹{paymentInfo?.paid}</p>
-          <p><b>Remaining:</b> ₹{paymentInfo?.remaining}</p>
+          <div className="payment-summary">
 
+            <p>
+              <b>Total:</b> ₹{paymentInfo?.agreed}
+            </p>
+
+            <p>
+              <b>Paid:</b> ₹{paymentInfo?.paid}
+            </p>
+
+            <p>
+              <b>Remaining:</b> ₹{paymentInfo?.remaining}
+            </p>
+
+          </div>
           <input
             placeholder="Your UPI ID (you@upi)"
             value={fromUpi}
@@ -346,12 +361,12 @@ const payWithRazorpay = () => {
 
           {/* 🔹 QR CODE */}
           <div className="qr-box">
-            <p>Scan & Pay</p>
+            <h4>Scan & Pay</h4>
             <img src={qrUrl} alt="QR Code" />
           </div>
 
           {/* 🔹 SAVE PAYMENT */}
-          <button className="submit-btn" onClick={makePayment}>
+          <button className="make-paid" onClick={makePayment}>
             Mark as Paid
           </button>
 

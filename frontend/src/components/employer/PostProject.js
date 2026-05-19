@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./PostProject.css";
+import EmployerNavbar from "./EmployerNavbar";
 
 function PostProject({ setPage }) {
   const [form, setForm] = useState({
@@ -65,54 +66,123 @@ function PostProject({ setPage }) {
   return (
     <div className="post-container">
 
-      <div className="post-navbar">
-        <h2>FreelanceHub</h2>
+      {/* NAVBAR */}
 
-        <div>
-          <button onClick={() => setPage("employer")}>Profile</button>
-          <button className="active">Post Project</button>
-          <button >View Posts</button>
-          <button>View Assigned Tasks</button>
-          <button onClick={() => setPage("home")}>Logout</button>
-        </div>
-      </div>
+      <EmployerNavbar
+        setPage={setPage}
+        active="post-project"
+      />
 
-      <div className="post-card">
-        <h2>Post a New Project</h2>
+      <div className="post-wrapper">
 
-        <label>Project Title</label>
-        <input name="title" onChange={handleChange} />
+        {/* HERO */}
 
-        <label>Description</label>
-        <textarea name="description" onChange={handleChange} />
+        <div className="post-hero">
 
-        <label>Required Skills</label>
-        <input name="skills" onChange={handleChange} />
+          <h1>Post Your Project</h1>
 
-        <div className="row">
-          <div>
-            <label>Budget</label>
-            <input name="budget" type="number" onChange={handleChange} />
-          </div>
+          <p>
+            Publish projects, hire freelancers
+            and collaborate professionally.
+          </p>
 
-          <div>
-            <label>Deadline</label>
-            <input name="deadline" type="date" onChange={handleChange} />
-          </div>
         </div>
 
-        {/* 🔥 FILE INPUT */}
-        <label>Attach Document (No videos)</label>
-        <input
-          type="file"
-          onChange={handleFile}
-          accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
-        />
+        {/* CARD */}
 
-        <button className="submit-btn" onClick={handleSubmit}>
-          Post Project
-        </button>
+        <div className="post-card">
+
+          <h2>Create New Project</h2>
+
+          {/* TITLE */}
+
+          <label>Project Title</label>
+
+          <input
+            name="title"
+            placeholder="Enter project title"
+            onChange={handleChange}
+          />
+
+          {/* DESCRIPTION */}
+
+          <label>Project Description</label>
+
+          <textarea
+            name="description"
+            placeholder="Describe your project requirements..."
+            onChange={handleChange}
+          />
+
+          {/* SKILLS */}
+
+          <label>Required Skills</label>
+
+          <input
+            name="skills"
+            placeholder="React, Python, UI/UX..."
+            onChange={handleChange}
+          />
+
+          {/* ROW */}
+
+          <div className="row">
+
+            <div>
+
+              <label>Budget (₹)</label>
+
+              <input
+                name="budget"
+                type="number"
+                placeholder="Enter budget"
+                onChange={handleChange}
+              />
+
+            </div>
+
+            <div>
+
+              <label>Deadline</label>
+
+              <input
+                name="deadline"
+                type="date"
+                onChange={handleChange}
+              />
+
+            </div>
+
+          </div>
+
+          {/* FILE */}
+
+          <label>Attach Document</label>
+
+          <input
+            type="file"
+            onChange={handleFile}
+            accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
+          />
+
+          <p className="file-note">
+            Supported:
+            PDF, DOC, DOCX, TXT, JPG, PNG
+          </p>
+
+          {/* BUTTON */}
+
+          <button
+            className="submit-btn"
+            onClick={handleSubmit}
+          >
+            Post Project
+          </button>
+
+        </div>
+
       </div>
+
     </div>
   );
 }

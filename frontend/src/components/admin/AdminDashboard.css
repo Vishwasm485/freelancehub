@@ -1,107 +1,234 @@
-.admin-container {
-  background: #f5f6fa;
-  min-height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Poppins', sans-serif;
+  background:#eef4ff;
+}
+
+/* MAIN */
+
+.admin-container{
+  min-height:100vh;
+
+  background:
+  linear-gradient(
+    135deg,
+    #eef4ff 0%,
+    #f8fbff 100%
+  );
+
+  color:#0f172a;
 }
 
 /* NAVBAR */
-.admin-navbar {
-  background: #2f6fed;
-  color: white;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
+.admin-navbar{
+  width:100%;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:24px 60px;
+
+  background:rgba(255,255,255,0.75);
+
+  backdrop-filter:blur(16px);
+
+  border-bottom:
+  1px solid rgba(255,255,255,0.4);
+
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 
-.admin-navbar button {
-  margin-left: 10px;
-  padding: 8px 12px;
-  border: none;
-  background: #1e4fd1;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
+.admin-navbar h2{
+  font-size:34px;
+  font-weight:700;
+
+  color:#2563eb;
 }
 
-/* CONTENT */
-.admin-content {
-  padding: 30px;
+.admin-navbar div{
+  display:flex;
+  gap:14px;
 }
 
-.admin-card {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  width: 450px;
-  text-align: center;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.admin-navbar button{
+  border:none;
+
+  background:#2563eb;
+  color:white;
+
+  padding:12px 20px;
+
+  border-radius:14px;
+
+  font-size:14px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.3s ease;
 }
 
-.primary-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: #2f6fed;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.admin-navbar button:hover{
+  transform:translateY(-3px);
+
+  background:#1d4ed8;
 }
-.admin-content {
-  padding: 30px;
-  text-align: center;
+
+/* HERO SECTION */
+
+.admin-content{
+  padding:60px;
+}
+
+/* WELCOME */
+
+.welcome-box{
+  margin-bottom:50px;
+}
+
+.welcome-box h2{
+  font-size:56px;
+  font-weight:700;
+
+  line-height:1.1;
+
+  color:#0f172a;
+
+  margin-bottom:14px;
+}
+
+.welcome-box p{
+  font-size:18px;
+
+  color:#64748b;
 }
 
 /* GRID */
-/* Welcome Box */
-.welcome-box {
-  margin-bottom: 20px;
+
+.grid{
+  display:grid;
+
+  grid-template-columns:
+  repeat(auto-fit, minmax(260px, 1fr));
+
+  gap:28px;
 }
 
-.welcome-box h2 {
-  font-size: 30px;
-  font-weight: 600;
-  color: #2f6fed;
-}
-.welcome-box p {
-  color: #666;
-}
-.sub-text {
-  color: gray;
-  margin-top: 5px;
+/* CARD */
+
+.card{
+  position:relative;
+
+  background:
+  rgba(255,255,255,0.82);
+
+  backdrop-filter:blur(16px);
+
+  border-radius:28px;
+
+  padding:38px 30px;
+
+  overflow:hidden;
+
+  transition:0.35s ease;
+
+  box-shadow:
+  0 12px 30px rgba(0,0,0,0.08);
 }
 
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+.card::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:6px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #2563eb,
+    #60a5fa
+  );
 }
 
-/* CARD IMPROVED */
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.card:hover{
+  transform:
+  translateY(-8px);
+
+  box-shadow:
+  0 18px 40px rgba(37,99,235,0.15);
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.card h3{
+  font-size:54px;
+  font-weight:700;
+
+  color:#2563eb;
+
+  margin-bottom:12px;
 }
 
-.card h3 {
-  font-size: 30px;
-  color: #2f6fed;
+.card p{
+  font-size:17px;
+
+  color:#64748b;
+
+  font-weight:500;
 }
 
-/* FOOTER */
-.footer {
-  margin-top: 40px;
-  padding: 15px;
-  text-align: center;
-  background: #f1f1f1;
-  color: #555;
-  font-size: 14px;
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+  .admin-navbar{
+    flex-direction:column;
+    gap:20px;
+
+    padding:25px;
+  }
+
+  .admin-content{
+    padding:35px 25px;
+  }
+
+  .welcome-box h2{
+    font-size:42px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .admin-navbar div{
+    flex-direction:column;
+    width:100%;
+  }
+
+  .admin-navbar button{
+    width:100%;
+  }
+
+  .welcome-box h2{
+    font-size:34px;
+  }
+
+  .card{
+    padding:30px 24px;
+  }
+
 }

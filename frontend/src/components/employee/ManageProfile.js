@@ -22,6 +22,12 @@ function ManageProfile({ setPage }) {
   }, []);
 
 const handleUpdate = async () => {
+
+if(password !== confirmPassword){
+    alert("Passwords do not match");
+    return;
+  }
+
   try {
     const res = await fetch("http://127.0.0.1:5000/api/employee/update-profile", {
       method: "POST",
@@ -35,6 +41,7 @@ const handleUpdate = async () => {
       })
     });
 
+    
     const data = await res.json();
 
     if (data.message) {
@@ -114,7 +121,9 @@ const uploadProfilePic = async () => {
           type="file"
           onChange={(e) => setProfilePic(e.target.files[0])}
         />
-        <button onClick={uploadProfilePic}>
+        <button 
+          className="upload-btn"
+          onClick={uploadProfilePic}>
           Upload Profile Picture
         </button>
 

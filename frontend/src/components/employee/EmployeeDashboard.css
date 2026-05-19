@@ -1,127 +1,181 @@
-/* RESET */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* BACKGROUND */
-.container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eef2f7, #dfe9f3);
+body{
+  font-family:'Poppins', sans-serif;
 }
 
-/* NAVBAR */
-.navbar {
-  background: linear-gradient(90deg, #2f6fed, #1e4fd1);
-  color: white;
-  padding: 15px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+/* MAIN */
 
-.navbar h2 {
-  font-weight: 600;
-  letter-spacing: 1px;
-}
+.container{
+  min-height:100vh;
 
-/* NAV BUTTONS */
-.navbar button {
-  margin-left: 10px;
-  padding: 8px 14px;
-  border: none;
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+  background:
+  linear-gradient(
+    135deg,
+    #eef4ff 0%,
+    #f8fbff 100%
+  );
 
-.navbar button:hover {
-  background: white;
-  color: #2f6fed;
-  transform: translateY(-2px);
+  padding-bottom:60px;
 }
 
 /* TITLE */
-.profile-title {
-  text-align: center;
-  margin-top: 40px;
-  color: #2f6fed;
-  font-weight: 600;
-  letter-spacing: 1px;
+
+.profile-title{
+  text-align:center;
+
+  margin-top:60px;
+  margin-bottom:20px;
+
+  font-size:56px;
+  font-weight:700;
+
+  color:#0f172a;
 }
 
 /* PROFILE CARD */
-.profile-card {
-  width: 420px;
-  margin: 30px auto;
-  padding: 30px;
-  border-radius: 20px;
 
-  /* glass effect */
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
+.profile-card{
+  width:100%;
+  max-width:520px;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  text-align: center;
-  transition: 0.3s ease;
+  margin:auto;
+
+  background:
+  rgba(255,255,255,0.82);
+
+  backdrop-filter:blur(18px);
+
+  border-radius:30px;
+
+  padding:40px;
+
+  text-align:center;
+
+  box-shadow:
+  0 12px 30px rgba(0,0,0,0.08);
+
+  transition:0.35s ease;
 }
 
-.profile-card:hover {
-  transform: translateY(-5px);
+.profile-card:hover{
+  transform:translateY(-6px);
+
+  box-shadow:
+  0 18px 40px rgba(37,99,235,0.14);
 }
 
 /* IMAGE */
-.profile-img {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  border: 2px solid #2f6fed;
-  object-fit: cover;
-  margin-bottom: 10px;
+
+.profile-img{
+  width:130px;
+  height:130px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  border:4px solid #2563eb;
+
+  margin-bottom:18px;
 }
 
 /* NAME */
-.profile-card h3 {
-  margin-top: 10px;
-  font-weight: 600;
+
+.profile-card h3{
+  font-size:34px;
+  font-weight:700;
+
+  color:#0f172a;
+
+  margin-bottom:8px;
 }
 
-.profile-card p {
-  color: #777;
+.profile-card p{
+  color:#64748b;
 }
 
-/* CONTACT BOX */
-.contact {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 12px;
-  background: #f8f9fc;
-  text-align: left;
+/* CONTACT */
+
+.contact{
+  margin-top:30px;
+
+  background:#f8fafc;
+
+  border-radius:20px;
+
+  padding:25px;
+
+  text-align:left;
 }
 
-.contact p {
-  margin: 5px 0;
+.contact p{
+  margin-bottom:14px;
+
+  font-size:15px;
+
+  color:#334155;
+}
+
+.contact b{
+  color:#0f172a;
 }
 
 /* BUTTON */
-.btn-primary {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(90deg, #2f6fed, #1e4fd1);
-  color: white;
-  cursor: pointer;
-  transition: 0.3s ease;
+
+.btn-primary{
+  width:100%;
+
+  margin-top:30px;
+
+  border:none;
+
+  background:
+  linear-gradient(
+    90deg,
+    #2563eb,
+    #3b82f6
+  );
+
+  color:white;
+
+  padding:16px;
+
+  border-radius:18px;
+
+  font-size:16px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.3s ease;
 }
 
-.btn-primary:hover {
-  transform: scale(1.03);
-  box-shadow: 0 5px 15px rgba(47,111,237,0.4);
+.btn-primary:hover{
+  transform:translateY(-4px);
+
+  box-shadow:
+  0 12px 25px rgba(37,99,235,0.25);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .profile-title{
+    font-size:40px;
+  }
+
+  .profile-card{
+    margin:20px;
+
+    padding:30px 24px;
+  }
+
 }

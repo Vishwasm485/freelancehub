@@ -63,48 +63,72 @@ function ManageEmployerProfile({ setPage }) {
     console.error(err);
     alert("Upload failed");
   }
-};
+ };
 
   return (
     <div className="mp-container">
 
       <div className="mp-card">
+
         <h2>Manage Profile</h2>
+
+        <label>Profile Picture</label>
 
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setProfilePic(e.target.files[0])}
         />
-        <button onClick={uploadProfilePic}>
+
+        <button
+          className="upload-btn"
+          onClick={uploadProfilePic}
+        >
           Upload Profile Picture
         </button>
+
+        <label>Phone Number</label>
+
         <input
-          placeholder="Phone Number"
+          placeholder="Enter phone number"
+          value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
 
+        <label>New Password</label>
+
         <input
           type="password"
-          placeholder="New Password"
+          placeholder="Enter new password"
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
+        <label>Confirm Password</label>
+
         <input
           type="password"
-          placeholder="Confirm Password"
+          placeholder="Confirm password"
+          value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
         />
 
-        <button onClick={handleUpdate}>
+        <button
+          className="update-btn"
+          onClick={handleUpdate}
+        >
           Update Profile
         </button>
 
-        <button onClick={() => setPage("employer")}>
-          Back
+        <button
+          className="back-btn"
+          onClick={() => setPage("employer")}
+        >
+          Back to Dashboard
         </button>
 
       </div>
+
     </div>
   );
 }

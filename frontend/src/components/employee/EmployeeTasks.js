@@ -3,6 +3,7 @@ import "./EmployeeTasks.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import ChatModal from "../common/ChatModal";
+import EmployeeNavbar from "./EmployeeNavbar";
 
 function EmployeeTasks({ setPage }) {
   const [tasks, setTasks] = useState([]);
@@ -130,75 +131,76 @@ useEffect(() => {
     <div className="task-page">
 
       {/* ✅ NAVBAR (ADD HERE) */}
-      <div className="navbar">
-        <h2>FreelanceHub</h2>
-        <div>
-          <button onClick={() => setPage("employee")}>Profile</button>
-          <button onClick={() => setPage("employee-projects")}>View Posts</button>
-          <button className="active">My Tasks</button>
-          <button onClick={() => setPage("home")}>Logout</button>
-        </div>
-      </div>
+      <EmployeeNavbar
+          setPage={setPage}
+          active="my-tasks"
+        />
 
       {/* ✅ PAGE CONTENT */}
-      <div style={{ padding: "20px" }}>
-        <h2>My Tasks</h2>
+      <div className="tasks-content">
+        <div className="tasks-header">
 
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "15px"
-        }}>
+          <h1>My Tasks</h1>
+
+          <p>
+            Track assigned projects,
+            monitor progress and manage payments.
+          </p>
+
+        </div>
+        <div className="tasks-grid">
           {tasks.map(t => (
-            <div key={t.assignment_id} style={{
-              border: "1px solid #ddd",
-              padding: "15px",
-              borderRadius: "10px"
-            }}>
+            <div key={t.assignment_id} className="task-card">
 
-              <h3>{t.title}</h3>
-              <p>{t.description}</p>
+              <div className="task-meta">
 
-              <p><b>Skills:</b> {t.skills}</p>
-              <p>📅 Deadline: {t.deadline}</p>
+                <p>
+                  <b>Skills:</b> {t.skills}
+                </p>
 
-              <p>👤 {t.employer_name}</p>
-              <p>📧 {t.email}</p>
-              <p>📞 {t.phone}</p>
+                <p>
+                  <b>Deadline:</b> {t.deadline}
+                </p>
 
-              <p>💰 ₹{t.agreed_amount}</p>
+                <p>
+                  <b>Employer:</b> {t.employer_name}
+                </p>
+
+                <p>
+                  <b>Email:</b> {t.email}
+                </p>
+
+                <p>
+                  <b>Phone:</b> {t.phone}
+                </p>
+
+                <p className="amount">
+                  ₹{t.agreed_amount}
+                </p>
+
+              </div>
 
               {t.file_path && (
                 <a
+                  className="attachment-btn"
                   href={`http://127.0.0.1:5000/${t.file_path}`}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  📎 Attachment
+                  View Attachment
                 </a>
               )}
 
-              <div style={{ marginTop: "10px" }}>
-                <button onClick={()=>viewStatus(t.assignment_id)}
-                style={{ width: "100%", marginBottom: "5px" }}>
+              <div className="task-actions">
+                <button className="status-btn" onClick={()=>viewStatus(t.assignment_id)}>
                   View Status
                 </button>
 
-                <button
-                style={{
-                  width: "100%",
-                  marginBottom: "5px",
-                  background: "green",
-                  color: "white"
-                }} onClick={() => viewPayment(t.assignment_id)}>
+                <button className="payment-btn" onClick={() => viewPayment(t.assignment_id)}>
                   View Payment
                 </button>
 
-                <button style={{
-                  width: "100%",
-                  background: "#4f46e5",
-                  color: "white"
-                }}onClick={() => {
+                <button className="chat-btn" onClick={() => {
                   setChatAssignment(t.assignment_id);
                   setShowChat(true);
                 }}>
@@ -218,14 +220,14 @@ useEffect(() => {
 
       <h3>Task Progress</h3>
 
-      <div style={{ width: "180px", margin: "15px auto" }}>
+      <div className="progress-wrapper">
         <CircularProgressbar
           value={progress}
           text={`${progress}%`}
           styles={buildStyles({
-            pathColor: "#22c55e",
-            trailColor: "#f87171",
-            textColor: "#333"
+            pathColor: "#2563eb",
+            trailColor: "#dbeafe",
+            textColor: "#0f172a"
           })}
         />
       </div>

@@ -77,11 +77,12 @@ def get_projects(employer_id):
     conn, cursor = get_cursor()
 
     cursor.execute("""
-        SELECT * FROM projects 
+        SELECT * FROM projects
         WHERE employer_id=%s
+        AND (status IS NULL OR status != 'assigned')
         ORDER BY id DESC
     """, (employer_id,))
-
+    
     projects = cursor.fetchall()
 
     conn.close()
@@ -157,6 +158,20 @@ def assign_project():
 
         if not project:
             return jsonify({"error": "Project not found"}), 404
+        
+        # CHECK IF PROJECT ALREADY ASSIGNED
+        cursor.execute("""
+            SELECT id FROM assignments
+            WHERE project_id=%s
+        """, (project_id,))
+
+        existing = cursor.fetchone()
+
+        if existing:
+            conn.close()
+            return jsonify({
+                "error": "Project already assigned"
+            }), 400
 
         # ✅ STEP 2: INSERT INTO ASSIGNMENTS
         cursor.execute("""

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./AdminDashboard.css";
+import AdminNavbar from "./AdminNavbar";
 
 function AdminDashboard({ setPage }) {
   const getGreeting = () => {
@@ -29,15 +30,10 @@ function AdminDashboard({ setPage }) {
     <div className="admin-container">
 
       {/* NAVBAR */}
-      <div className="admin-navbar">
-        <h2>FreelanceHub</h2>
-
-        <div>
-          <button onClick={() => setPage("post-resource")}>Post Resource</button>
-          <button onClick={() => setPage("view-resources")}>View Resources</button>
-          <button onClick={() => setPage("home")}>Logout</button>
-        </div>
-      </div>
+      <AdminNavbar
+        setPage={setPage}
+        active="dashboard"
+      />
 
       <div className="admin-content">
 

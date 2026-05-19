@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./ViewPosts.css";
+import EmployerNavbar from "./EmployerNavbar";
 
 function ViewPosts({ setPage }) {
   const [projects, setProjects] = useState([]);
@@ -8,20 +9,22 @@ function ViewPosts({ setPage }) {
   const [selectedBid, setSelectedBid] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("user"));
 
   // ==============================
   // LOAD PROJECTS
   // ==============================
   useEffect(() => {
-    if (!user?.user_id) return;
+  const user = JSON.parse(localStorage.getItem("user"));
 
     fetch(`http://127.0.0.1:5000/api/employer/projects/${user.user_id}`)
       .then(res => res.json())
-      .then(data => setProjects(data))
+      .then(data => {
+        console.log("PROJECTS:", data);
+        setProjects(data);
+      })
       .catch(err => console.error(err));
 
-  }, [user?.user_id]);
+  }, []);
 
   // ==============================
   // DELETE PROJECT
@@ -109,7 +112,9 @@ function ViewPosts({ setPage }) {
 
       // ✅ REMOVE PROJECT FROM LIST
       setProjects(prev =>
-        prev.filter(p => p.id !== selectedBid.project_id)
+        prev.filter(
+          p => Number(p.id) !== Number(selectedBid.project_id)
+        )
       );
 
       setShowPopup(false);
@@ -134,108 +139,195 @@ function ViewPosts({ setPage }) {
     <div className="vp-page">
 
       {/* NAVBAR */}
-      <div className="vp-navbar">
-        <h2>FreelanceHub</h2>
 
-        <div>
-          <button onClick={() => setPage("employer")}>Profile</button>
-          <button onClick={() => setPage("post-project")}>Post Project</button>
-          <button className="active">View Posts</button>
-          <button onClick={() => setPage("assigned-tasks")}>
-            View Assigned Tasks
-          </button>
-          <button onClick={() => setPage("home")}>Logout</button>
+      <EmployerNavbar
+        setPage={setPage}
+        active="view-posts"
+      />
+
+      <div className="vp-wrapper">
+
+        {/* HERO */}
+
+        <div className="vp-hero">
+
+          <h1>Your Posted Projects</h1>
+
+          <p>
+            Manage projects, monitor bids
+            and assign freelancers.
+          </p>
+
         </div>
-      </div>
 
-      {/* SEARCH */}
-      <div className="vp-search">
-        <input
-          placeholder="Search by project title..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+        {/* SEARCH */}
 
-      {/* PROJECT GRID */}
-      <div className="vp-grid">
-        {filtered.map(p => (
-          <div key={p.id} className="vp-card">
+        <div className="vp-search">
 
-            <h3>{p.title}</h3>
+          <input
+            placeholder="Search by project title..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
 
-            <p className="desc">{p.description}</p>
+        </div>
 
-            <div className="skills">
-              {(p.skills || "").split(",").map((s, i) => (
-                <span key={i}>{s.trim()}</span>
-              ))}
+        {/* PROJECT GRID */}
+
+        <div className="vp-grid">
+
+          {filtered.map(p => (
+
+            <div key={p.id} className="vp-card">
+
+              <h3>{p.title}</h3>
+
+              <p className="desc">
+                {p.description}
+              </p>
+
+              {/* SKILLS */}
+
+              <div className="skills">
+
+                {(p.skills || "")
+                  .split(",")
+                  .map((s, i) => (
+
+                  <span key={i}>
+                    {s.trim()}
+                  </span>
+
+                ))}
+
+              </div>
+
+              {/* INFO */}
+
+              <div className="project-info">
+
+                <p>
+                  💰 Budget:
+                  <b> ₹{p.budget}</b>
+                </p>
+
+                <p>
+                  📅 Deadline:
+                  <b> {p.deadline}</b>
+                </p>
+
+                <p>
+                  🕒 Posted:
+                  <b> {p.created_at}</b>
+                </p>
+
+              </div>
+
+              {/* ATTACHMENT */}
+
+              {p.file_path && (
+
+                <a
+                  href={`http://127.0.0.1:5000/${p.file_path}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="attach"
+                >
+                  📎 View Attachment
+                </a>
+
+              )}
+
+              {/* ACTIONS */}
+
+              <div className="actions">
+
+                <button
+                  className="delete"
+                  onClick={() => handleDelete(p.id)}
+                >
+                  Delete Project
+                </button>
+
+                <button
+                  className="bids"
+                  onClick={() => handleViewBid(p.id)}
+                >
+                  View Bids
+                </button>
+
+              </div>
+
             </div>
 
-            <p>💰 Budget: ₹{p.budget}</p>
-            <p>📅 Deadline: {p.deadline}</p>
-            <p>🕒 Posted: {p.created_at}</p>
+          ))}
 
-            {/* ATTACHMENT */}
-            {p.file_path && (
-              <a
-                href={`http://127.0.0.1:5000/${p.file_path}`}
-                target="_blank"
-                rel="noreferrer"
-                className="attach"
-              >
-                📎 View Attachment
-              </a>
-            )}
+        </div>
 
-            {/* ACTIONS */}
-            <div className="actions">
-
-              <button
-                className="delete"
-                onClick={() => handleDelete(p.id)}
-              >
-                Delete Project
-              </button>
-
-              <button
-                className="bids"
-                onClick={() => handleViewBid(p.id)}
-              >
-                View Bids
-              </button>
-
-            </div>
-
-          </div>
-        ))}
       </div>
 
-      {/* ==============================
-          BID POPUP
-      ============================== */}
+      {/* POPUP */}
+
       {showPopup && selectedBid && (
+
         <div className="popup">
+
           <div className="popup-box">
 
             <h3>Lowest Bid Details</h3>
 
-            <p><b>Name:</b> {selectedBid?.name || "-"}</p>
-            <p><b>Gender:</b> {selectedBid?.gender || "-"}</p>
-            <p><b>Email:</b> {selectedBid?.email || "-"}</p>
-            <p><b>Phone:</b> {selectedBid?.phone || "-"}</p>
-            <p><b>Bid Amount:</b> ₹{selectedBid?.bid_amount || 0}</p>
+            <p>
+              <b>Name:</b>
+              {" "}
+              {selectedBid?.name || "-"}
+            </p>
+
+            <p>
+              <b>Gender:</b>
+              {" "}
+              {selectedBid?.gender || "-"}
+            </p>
+
+            <p>
+              <b>Email:</b>
+              {" "}
+              {selectedBid?.email || "-"}
+            </p>
+
+            <p>
+              <b>Phone:</b>
+              {" "}
+              {selectedBid?.phone || "-"}
+            </p>
+
+            <p>
+              <b>Bid Amount:</b>
+              {" "}
+              ₹{selectedBid?.bid_amount || 0}
+            </p>
 
             <div className="popup-actions">
-              <button onClick={() => setShowPopup(false)}>Close</button>
 
-              <button className="assign" onClick={handleAssign} disabled={!selectedBid}>
+              <button
+                onClick={() => setShowPopup(false)}
+              >
+                Close
+              </button>
+
+              <button
+                className="assign"
+                onClick={handleAssign}
+                disabled={!selectedBid}
+              >
                 Assign Task
               </button>
+
             </div>
 
           </div>
+
         </div>
+
       )}
 
     </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./EmployeeDashboard.css";
+import EmployeeNavbar from "./EmployeeNavbar";
 
 function EmployeeDashboard({ setPage }) {
   const [user, setUser] = useState(null);
@@ -29,28 +30,10 @@ function EmployeeDashboard({ setPage }) {
     <div className="container">
 
       {/* NAVBAR */}
-      <div className="navbar">
-        <h2>FreelanceHub</h2>
-
-        <div>
-          <button>Profile</button>
-          <button onClick={()=>setPage("employee-projects")}>View Posts</button>
-          <button onClick={() => setPage("employee-tasks")}>
-            My Tasks
-          </button>
-          <button onClick={() => setPage("employee-resources")}>
-            Resources
-          </button>
-          <button
-            onClick={() => {
-              localStorage.removeItem("user");
-              window.location.href = "/";
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+      <EmployeeNavbar
+        setPage={setPage}
+        active="profile"
+      />
 
       {/* PROFILE TITLE */}
       <h2 className="profile-title">PROFILE</h2>

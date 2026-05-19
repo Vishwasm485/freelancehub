@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./EmployeeProjects.css";
+import EmployeeNavbar from "./EmployeeNavbar";
 
 function EmployeeProjects({ setPage }) {
   const [projects, setProjects] = useState([]);
@@ -61,16 +62,20 @@ const submitBid = async () => {
     <div className="emp-page">
 
       {/* NAVBAR */}
-      <div className="emp-navbar">
-        <h2>FreelanceHub</h2>
-        <div>
-          <button onClick={() => setPage("employee")}>Profile</button>
-          <button className="active">View Posts</button>
-          <button>My Tasks</button>
-          <button onClick={() => setPage("employee-resources")}>Resources</button>
-          <button onClick={() => setPage("home")}>Logout</button>
-        </div>
-      </div>
+      <EmployeeNavbar
+        setPage={setPage}
+        active="view-posts"
+      />
+      <div className="projects-header">
+
+      <h1>Available Projects</h1>
+
+      <p>
+        Browse active projects and place
+        competitive bids to get hired.
+      </p>
+
+    </div>
 
       {/* GRID */}
       <div className="emp-grid">
@@ -86,16 +91,26 @@ const submitBid = async () => {
               ))}
             </div>
 
-            <p>💰 Budget: ₹{p.budget}</p>
-            <p>📅 Deadline: {p.deadline}</p>
+            <div className="project-meta">
+
+            <p>
+              <b>Budget:</b> ₹{p.budget}
+            </p>
+
+            <p>
+              <b>Deadline:</b> {p.deadline}
+            </p>
+
+          </div>
 
             {p.file_path && (
-              <a
+             <a
+                className="attachment-link"
                 href={`http://127.0.0.1:5000/${p.file_path}`}
                 target="_blank"
                 rel="noreferrer"
               >
-                📎 View Attachment
+                View Attachment
               </a>
             )}
 

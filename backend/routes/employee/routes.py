@@ -124,7 +124,7 @@ def get_employee_tasks(employee_id):
         JOIN projects p ON a.project_id = p.id
         JOIN users u ON p.employer_id = u.id
         WHERE a.employee_id = %s
-        GROUP BY a.project_id
+        AND p.status = 'assigned'
         ORDER BY a.id DESC
     """, (employee_id,))
 

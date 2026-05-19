@@ -1,30 +1,175 @@
-.mp-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ===== PAGE ===== */
+
+.mp-container{
+  min-height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  padding:40px 20px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #eef2ff 0%,
+    #f8fbff 50%,
+    #e8f0ff 100%
+  );
+
+  font-family:"Segoe UI",sans-serif;
 }
 
-.mp-card {
-  width: 350px;
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  text-align: center;
+/* ===== CARD ===== */
+
+.mp-card{
+  width:100%;
+  max-width:430px;
+
+  background:
+  rgba(255,255,255,0.82);
+
+  backdrop-filter:blur(16px);
+
+  border-radius:30px;
+
+  padding:35px;
+
+  box-shadow:
+  0 12px 40px rgba(37,99,235,0.12);
+
+  border:1px solid rgba(255,255,255,0.5);
 }
 
-.mp-card input {
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
+/* ===== TITLE ===== */
+
+.mp-card h2{
+  text-align:center;
+
+  font-size:32px;
+  font-weight:700;
+
+  color:#0f172a;
+
+  margin-bottom:28px;
 }
 
-.mp-card button {
-  margin-top: 10px;
-  padding: 10px;
-  width: 100%;
-  background: #2f6fed;
-  color: white;
-  border: none;
+/* ===== LABELS ===== */
+
+.mp-card label{
+  display:block;
+
+  margin-top:16px;
+  margin-bottom:8px;
+
+  font-size:14px;
+  font-weight:600;
+
+  color:#334155;
+}
+
+/* ===== INPUTS ===== */
+
+.mp-card input{
+  width:100%;
+
+  padding:14px 16px;
+
+  border-radius:16px;
+
+  border:1px solid #dbe4f0;
+
+  background:#f8fbff;
+
+  font-size:15px;
+
+  outline:none;
+
+  transition:0.3s ease;
+}
+
+.mp-card input:focus{
+  border-color:#2563eb;
+
+  background:white;
+
+  box-shadow:
+  0 0 0 4px rgba(37,99,235,0.08);
+}
+
+/* ===== FILE INPUT ===== */
+
+.mp-card input[type="file"]{
+  padding:12px;
+  background:white;
+}
+
+/* ===== BUTTONS ===== */
+
+.mp-card button{
+  width:100%;
+
+  border:none;
+
+  padding:14px;
+
+  border-radius:16px;
+
+  font-size:15px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:0.3s ease;
+
+  margin-top:16px;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+
+.upload-btn,
+.update-btn{
+  background:
+  linear-gradient(
+    90deg,
+    #2563eb,
+    #3b82f6
+  );
+
+  color:white;
+}
+
+.upload-btn:hover,
+.update-btn:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+  0 10px 22px rgba(37,99,235,0.22);
+}
+
+/* ===== BACK BUTTON ===== */
+
+.back-btn{
+  background:#eef2ff;
+
+  color:#2563eb;
+}
+
+.back-btn:hover{
+  background:#dbe7ff;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:600px){
+
+  .mp-card{
+    padding:28px 22px;
+    border-radius:24px;
+  }
+
+  .mp-card h2{
+    font-size:26px;
+  }
+
 }

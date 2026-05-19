@@ -1,85 +1,235 @@
-.post-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eef2f7, #dbe6f6);
-  font-family: "Segoe UI", sans-serif;
+/* ===== PAGE ===== */
+
+.post-container{
+  min-height:100vh;
+
+  background:
+  linear-gradient(
+    135deg,
+    #eef4ff 0%,
+    #f8fbff 50%,
+    #e9f0ff 100%
+  );
+
+  font-family:"Segoe UI",sans-serif;
 }
 
-/* NAVBAR */
-.post-navbar {
-  background: linear-gradient(90deg, #2f6fed, #1e4fd1);
-  color: white;
-  padding: 15px 40px;
-  display: flex;
-  justify-content: space-between;
+/* ===== MAIN WRAPPER ===== */
+
+.post-wrapper{
+  width:100%;
+  max-width:1200px;
+
+  margin:auto;
+
+  padding:50px 20px;
 }
 
-.post-navbar button {
-  margin-left: 10px;
-  padding: 8px 14px;
-  border: none;
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
+/* ===== HERO ===== */
+
+.post-hero{
+  text-align:center;
+
+  margin-bottom:40px;
 }
 
-.post-navbar .active {
-  background: #ff4d4d;
+.post-hero h1{
+  font-size:58px;
+  font-weight:800;
+
+  color:#0f172a;
+
+  margin-bottom:12px;
 }
 
-/* CARD */
-.post-card {
-  width: 500px;
-  margin: 40px auto;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(10px);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+.post-hero p{
+  font-size:18px;
+  color:#64748b;
 }
 
-.post-card h2 {
-  margin-bottom: 20px;
+/* ===== CARD ===== */
+
+.post-card{
+  width:100%;
+  max-width:760px;
+
+  margin:auto;
+
+  background:
+  rgba(255,255,255,0.82);
+
+  backdrop-filter:blur(16px);
+
+  border-radius:32px;
+
+  padding:38px;
+
+  box-shadow:
+  0 18px 45px rgba(37,99,235,0.12);
+
+  border:
+  1px solid rgba(255,255,255,0.5);
 }
 
-/* INPUTS */
+/* ===== SECTION TITLE ===== */
+
+.post-card h2{
+  font-size:32px;
+  font-weight:700;
+
+  color:#0f172a;
+
+  margin-bottom:28px;
+}
+
+/* ===== LABELS ===== */
+
+.post-card label{
+  display:block;
+
+  margin-bottom:10px;
+  margin-top:18px;
+
+  font-size:14px;
+  font-weight:600;
+
+  color:#334155;
+}
+
+/* ===== INPUTS ===== */
+
 .post-card input,
-.post-card textarea {
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  outline: none;
+.post-card textarea{
+  width:100%;
+
+  padding:16px 18px;
+
+  border-radius:18px;
+
+  border:1px solid #dbe4f0;
+
+  background:#f8fbff;
+
+  font-size:15px;
+
+  outline:none;
+
+  transition:0.3s ease;
 }
 
-.post-card textarea {
-  height: 100px;
+.post-card input:focus,
+.post-card textarea:focus{
+  border-color:#2563eb;
+
+  background:white;
+
+  box-shadow:
+  0 0 0 4px rgba(37,99,235,0.08);
 }
 
-/* ROW */
-.row {
-  display: flex;
-  gap: 10px;
+/* ===== TEXTAREA ===== */
+
+.post-card textarea{
+  min-height:140px;
+
+  resize:none;
 }
 
-.row div {
-  flex: 1;
+/* ===== ROW ===== */
+
+.row{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:18px;
 }
 
-/* BUTTON */
-.submit-btn {
-  width: 100%;
-  margin-top: 15px;
-  padding: 12px;
-  background: #2f6fed;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
+/* ===== FILE INPUT ===== */
+
+.post-card input[type="file"]{
+  padding:14px;
+  background:white;
 }
 
-.submit-btn:hover {
-  background: #1e4fd1;
+/* ===== FILE NOTE ===== */
+
+.file-note{
+  margin-top:8px;
+
+  font-size:13px;
+
+  color:#64748b;
+}
+
+/* ===== BUTTON ===== */
+
+.submit-btn{
+  width:100%;
+
+  margin-top:30px;
+
+  padding:16px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:
+  linear-gradient(
+    90deg,
+    #2563eb,
+    #3b82f6
+  );
+
+  color:white;
+
+  font-size:16px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:0.3s ease;
+}
+
+.submit-btn:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+  0 12px 24px rgba(37,99,235,0.25);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:768px){
+
+  .post-hero h1{
+    font-size:40px;
+  }
+
+  .post-card{
+    padding:28px;
+    border-radius:24px;
+  }
+
+  .row{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:500px){
+
+  .post-hero h1{
+    font-size:32px;
+  }
+
+  .post-hero p{
+    font-size:15px;
+  }
+
+  .post-card{
+    padding:22px;
+  }
+
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./EmployeeResources.css";
+import EmployeeNavbar from "./EmployeeNavbar";
 
 function EmployeeResources({ setPage }) {
   const [resources, setResources] = useState([]);
@@ -24,16 +25,20 @@ function EmployeeResources({ setPage }) {
     <div className="res-page">
 
       {/* NAVBAR */}
-      <div className="res-navbar">
-        <h2>FreelanceHub</h2>
+      <EmployeeNavbar
+        setPage={setPage}
+        active="resources"
+      />
+      {/* header */}
+      <div className="resources-header">
 
-        <div>
-          <button onClick={() => setPage("employee")}>Profile</button>
-          <button>View Posts</button>
-          <button>My Tasks</button>
-          <button className="active">Video Resources</button>
-          <button onClick={() => setPage("home")}>Logout</button>
-        </div>
+        <h1>Learning Resources</h1>
+
+        <p>
+          Explore tutorials, videos,
+          PDFs and learning materials.
+        </p>
+
       </div>
 
       {/* SEARCH */}
@@ -49,7 +54,18 @@ function EmployeeResources({ setPage }) {
       <div className="res-grid">
 
         {filtered.length === 0 ? (
-          <p style={{ textAlign: "center" }}>No resources found</p>
+          <div className="empty-state">
+
+            <>
+              <h3>No Resources Found</h3>
+
+              <p>
+                Try searching with different skills
+                or titles.
+              </p>
+            </>
+
+          </div>
         ) : (
 
           filtered.map((r) => {
@@ -62,6 +78,17 @@ function EmployeeResources({ setPage }) {
 
                 {/* TITLE */}
                 <h3>{r.title}</h3>
+                <div className="resource-type">
+
+                  {lowerPath.endsWith(".mp4")
+                    ? "VIDEO"
+                    : lowerPath.endsWith(".pdf")
+                    ? "PDF"
+                    : lowerPath.match(/\.(jpg|jpeg|png|gif)$/)
+                    ? "IMAGE"
+                    : "FILE"}
+
+                </div>
 
                 {/* DESCRIPTION */}
                 <p className="desc">
@@ -78,65 +105,51 @@ function EmployeeResources({ setPage }) {
                 {/* PREVIEW SECTION */}
 
                 {/* VIDEO */}
-                {lowerPath.endsWith(".mp4") ? (
-                  <video
-                    controls
-                    className="video-preview"
-                    style={{
-                      width: "100%",
-                      height: "160px",
-                      borderRadius: "10px",
-                      background: "#000"
-                    }}
-                  >
-                    <source
+                {/* FILE PREVIEW */}
+                <div className="file-preview-box">
+
+                  {lowerPath.endsWith(".mp4") ? (
+                    <video className="video-preview">
+                      <source
+                        src={`http://127.0.0.1:5000/${filePath}`}
+                        type="video/mp4"
+                      />
+                    </video>
+
+                  ) : lowerPath.match(/\.(jpg|jpeg|png|gif)$/) ? (
+
+                    <img
                       src={`http://127.0.0.1:5000/${filePath}`}
-                      type="video/mp4"
+                      alt="preview"
+                      className="image-preview"
                     />
-                  </video>
 
-                ) : lowerPath.match(/\.(jpg|jpeg|png|gif)$/) ? (
+                  ) : lowerPath.endsWith(".pdf") ? (
 
-                  /* IMAGE */
-                  <img
-                    src={`http://127.0.0.1:5000/${filePath}`}
-                    alt="preview"
-                    style={{
-                      width: "100%",
-                      height: "150px",
-                      objectFit: "cover",
-                      borderRadius: "10px"
-                    }}
-                    className="image-preview"
-                  />
+                    <div className="pdf-box">
+                      PDF Document
+                    </div>
 
-                ) : lowerPath.endsWith(".pdf") ? (
+                  ) : (
 
-                  /* PDF */
-                  <iframe
-                    src={`http://127.0.0.1:5000/${filePath}`}
-                    title="pdf"
-                    style={{
-                      width: "100%",
-                      height: "150px",
-                      borderRadius: "10px"
-                    }}
-                    className="pdf-preview"
-                  />
+                    <div className="pdf-box">
+                      File Attachment
+                    </div>
 
-                ) : (
-                  
-                  /* DOWNLOAD */
-                  <a
-                    href={`http://127.0.0.1:5000/${filePath}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="download-btn"
-                  >
-                    Download File
-                  </a>
+                  )}
 
-                )}
+                </div>
+
+                <a
+                  href={`http://127.0.0.1:5000/${filePath}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="download-btn"
+                >
+                  View File
+                </a>
+
+
 
               </div>
             );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./PostResource.css";
+import AdminNavbar from "./AdminNavbar";
 
 function PostResource({ setPage }) {
   const [form, setForm] = useState({
@@ -66,17 +67,10 @@ function PostResource({ setPage }) {
 
   return (
     <div className="post-container">
-
-      {/* NAVBAR */}
-      <div className="admin-navbar">
-        <h2>FreelanceHub</h2>
-
-        <div>
-          <button onClick={() => setPage("admin")}>Dashboard</button>
-          <button onClick={() => setPage("view-resources")}>View Resources</button>
-          <button onClick={() => setPage("home")}>Logout</button>
-        </div>
-      </div>
+      <AdminNavbar
+        setPage={setPage}
+        active="post-resource"
+      />
 
       <h1 className="page-title">Post a New Resource</h1>
 

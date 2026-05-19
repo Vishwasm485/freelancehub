@@ -68,7 +68,9 @@ return (
       {/* HEADER */}
       <div className="chat-header">
         <span>Chat</span>
-        <span onClick={onClose} style={{ cursor: "pointer" }}>✖</span>
+        <span className="chat-close" onClick={onClose}>
+          ✖
+        </span>
       </div>
 
       {/* MESSAGES */}
